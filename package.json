@@ -1,0 +1,31 @@
+{
+  "name": "myFlix-client",
+  "version": "1.0.0",
+  "description": "This is the client side of the myFlix App. It build on React.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ximnoise/myFlix-client.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ximnoise/myFlix-client/issues"
+  },
+  "homepage": "https://github.com/ximnoise/myFlix-client#readme",
+  "dependencies": {
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "sass": "^1.30.0"
+  }
+}
