@@ -37,6 +37,12 @@ export class MainView extends React.Component {
     });
   }
 
+  goBack() {
+    this.setState({
+      selectedMovie: null
+    });
+  }
+
   // This overrides the render() method of the superclass
   // No need to call super() though, as it does nothing by default
   render() {
@@ -50,7 +56,7 @@ export class MainView extends React.Component {
     return (
       <div className="main-view">
         {selectedMovie 
-          ? <MovieView movie={selectedMovie}/>
+          ? <MovieView movie={selectedMovie} goBack={() => this.goBack()}/>
           : movies.map(movie => (
             <MovieCard key={movie._id} movie={movie} onClick={movie => this.onMovieClick(movie)}/>
           ))
