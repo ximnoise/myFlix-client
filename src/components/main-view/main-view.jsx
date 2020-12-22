@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 
 import { LoginView } from '../login-view/login-view';
+import { RegistrationView } from '../registration-view/registration-view';
 import { MovieCard } from '../movie-card/movie-card';
 import { MovieView } from '../movie-view/movie-view';
 
@@ -16,7 +17,8 @@ export class MainView extends React.Component {
     this.state = {
       movies: null,
       selectedMovie: null,
-      user: null
+      user: null,
+      email: null
     };
   }
 
@@ -57,12 +59,20 @@ export class MainView extends React.Component {
     });
   }
 
+  onRegistration(email) {
+    this.setState({
+      email
+    });
+  }
+
   // This overrides the render() method of the superclass
   // No need to call super() though, as it does nothing by default
   render() {
     // If the state isn't initialized, this will throw on runtime
     // before the data is initially loaded
-    const { movies, selectedMovie, user } = this.state;
+    const { movies, selectedMovie, user, email } = this.state;
+
+    if (!email) return <RegistrationView onRegistration={email => this.onRegistration(email)} />;
 
     // If there is no user, the LoginView is rendered.
     // If there is a user logged in, the user details are passed as a prop to the LoginView
