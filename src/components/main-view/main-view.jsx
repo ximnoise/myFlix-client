@@ -84,13 +84,15 @@ export class MainView extends React.Component {
     return (
       // If the state of `selectedMovie` is not null, that selected movie
       // will be returned otherwise, all movies will be returned
-      <div className="main-view">
-        {selectedMovie 
-          ? <MovieView movie={selectedMovie} goBack={() => this.goBack()}/>
-          : movies.map(movie => (
-            <MovieCard key={movie._id} movie={movie} onClick={movie => this.onMovieClick(movie)}/>
-          ))
-        }
+      <div className="container-fluid">
+        <div className="main-view row">
+          {selectedMovie 
+            ? <MovieView movie={selectedMovie} goBack={() => this.goBack()}/>
+            : movies.map(movie => (
+              <MovieCard className="col-sm" key={movie._id} movie={movie} onClick={movie => this.onMovieClick(movie)}/>
+            ))
+          }
+        </div>
       </div>
     );
   }

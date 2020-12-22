@@ -33356,7 +33356,7 @@ var MovieCard = /*#__PURE__*/function (_React$Component) {
       }, _react.default.createElement(_Card.default.Img, {
         variant: "top",
         src: movie.ImagePath
-      }), _react.default.createElement(_Card.default.Body, null, _react.default.createElement(_Card.default.Title, null, movie.Title), _react.default.createElement(_Card.default.Text, null, movie.Description), _react.default.createElement(_Button.default, {
+      }), _react.default.createElement(_Card.default.Body, null, _react.default.createElement(_Card.default.Title, null, movie.Title), _react.default.createElement(_Card.default.Text, null, movie.Description)), _react.default.createElement(_Card.default.Footer, null, _react.default.createElement(_Button.default, {
         onClick: function onClick() {
           return _onClick(movie);
         },
@@ -33636,7 +33636,9 @@ var MainView = /*#__PURE__*/function (_React$Component) {
       return (// If the state of `selectedMovie` is not null, that selected movie
         // will be returned otherwise, all movies will be returned
         _react.default.createElement("div", {
-          className: "main-view"
+          className: "container-fluid"
+        }, _react.default.createElement("div", {
+          className: "main-view row"
         }, selectedMovie ? _react.default.createElement(_movieView.MovieView, {
           movie: selectedMovie,
           goBack: function goBack() {
@@ -33644,13 +33646,14 @@ var MainView = /*#__PURE__*/function (_React$Component) {
           }
         }) : movies.map(function (movie) {
           return _react.default.createElement(_movieCard.MovieCard, {
+            className: "col-sm",
             key: movie._id,
             movie: movie,
             onClick: function onClick(movie) {
               return _this3.onMovieClick(movie);
             }
           });
-        }))
+        })))
       );
     }
   }]);
@@ -33820,7 +33823,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51633" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55314" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
