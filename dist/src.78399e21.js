@@ -47938,9 +47938,7 @@ var _react = _interopRequireDefault(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
-var _Button = _interopRequireDefault(require("react-bootstrap/Button"));
-
-var _Card = _interopRequireDefault(require("react-bootstrap/Card"));
+var _reactBootstrap = require("react-bootstrap");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -47986,19 +47984,19 @@ var MovieCard = /*#__PURE__*/function (_React$Component) {
       var _this$props = this.props,
           movie = _this$props.movie,
           _onClick = _this$props.onClick;
-      return _react.default.createElement(_Card.default, {
+      return _react.default.createElement(_reactBootstrap.CardGroup, null, _react.default.createElement(_reactBootstrap.Card, {
         style: {
-          width: '20rem'
+          width: '15rem'
         }
-      }, _react.default.createElement(_Card.default.Img, {
+      }, _react.default.createElement(_reactBootstrap.Card.Img, {
         variant: "top",
         src: movie.ImagePath
-      }), _react.default.createElement(_Card.default.Body, null, _react.default.createElement(_Card.default.Title, null, movie.Title), _react.default.createElement(_Card.default.Text, null, movie.Description)), _react.default.createElement(_Card.default.Footer, null, _react.default.createElement(_Button.default, {
+      }), _react.default.createElement(_reactBootstrap.Card.Body, null, _react.default.createElement(_reactBootstrap.Card.Title, null, movie.Title), _react.default.createElement(_reactBootstrap.Card.Text, null, movie.Description), _react.default.createElement(_reactBootstrap.Button, {
         onClick: function onClick() {
           return _onClick(movie);
         },
         variant: "link"
-      }, "Open")));
+      }, "More"))));
     }
   }]);
 
@@ -48025,7 +48023,20 @@ MovieCard.propTypes = {
   }).isRequired,
   onClick: _propTypes.default.func.isRequired
 };
-},{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","react-bootstrap/Button":"../node_modules/react-bootstrap/esm/Button.js","react-bootstrap/Card":"../node_modules/react-bootstrap/esm/Card.js"}],"components/movie-view/movie-view.jsx":[function(require,module,exports) {
+/* 
+     <Card style={{ width: '20rem' }}>
+       <Card.Img variant="top" src={movie.ImagePath} />
+       <Card.Body>
+         <Card.Title>{movie.Title}</Card.Title>
+         <Card.Text>{movie.Description}</Card.Text>
+       </Card.Body>
+       <Card.Footer>
+         <Button onClick={() => onClick(movie)} variant="link">Open</Button>
+       </Card.Footer>
+     </Card>
+
+*/
+},{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","react-bootstrap":"../node_modules/react-bootstrap/esm/index.js"}],"components/movie-view/movie-view.jsx":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -48136,6 +48147,8 @@ exports.MainView = void 0;
 var _react = _interopRequireDefault(require("react"));
 
 var _axios = _interopRequireDefault(require("axios"));
+
+var _reactBootstrap = require("react-bootstrap");
 
 var _loginView = require("../login-view/login-view");
 
@@ -48276,21 +48289,23 @@ var MainView = /*#__PURE__*/function (_React$Component) {
           className: "main-container"
         }, _react.default.createElement("div", {
           className: "main-view"
-        }, selectedMovie ? _react.default.createElement(_movieView.MovieView, {
+        }, _react.default.createElement(_reactBootstrap.Row, null, selectedMovie ? _react.default.createElement(_movieView.MovieView, {
           movie: selectedMovie,
           goBack: function goBack() {
             return _this3.goBack();
           }
         }) : movies.map(function (movie) {
-          return _react.default.createElement(_movieCard.MovieCard, {
-            className: "col-xs-auto",
+          return _react.default.createElement(_reactBootstrap.Col, {
+            sm: 4,
+            key: movie._id
+          }, _react.default.createElement(_movieCard.MovieCard, {
             key: movie._id,
             movie: movie,
             onClick: function onClick(movie) {
               return _this3.onMovieClick(movie);
             }
-          });
-        })))
+          }));
+        }))))
       );
     }
   }]);
@@ -48299,7 +48314,7 @@ var MainView = /*#__PURE__*/function (_React$Component) {
 }(_react.default.Component);
 
 exports.MainView = MainView;
-},{"react":"../node_modules/react/index.js","axios":"../node_modules/axios/index.js","../login-view/login-view":"components/login-view/login-view.jsx","../registration-view/registration-view":"components/registration-view/registration-view.jsx","../movie-card/movie-card":"components/movie-card/movie-card.jsx","../movie-view/movie-view":"components/movie-view/movie-view.jsx"}],"index.scss":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","axios":"../node_modules/axios/index.js","react-bootstrap":"../node_modules/react-bootstrap/esm/index.js","../login-view/login-view":"components/login-view/login-view.jsx","../registration-view/registration-view":"components/registration-view/registration-view.jsx","../movie-card/movie-card":"components/movie-card/movie-card.jsx","../movie-view/movie-view":"components/movie-view/movie-view.jsx"}],"index.scss":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -48393,7 +48408,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59654" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63627" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
