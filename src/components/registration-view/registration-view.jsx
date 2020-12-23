@@ -27,7 +27,6 @@ export function RegistrationView(props) {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
-          <Form.Text className="text-muted">(min. length 5)</Form.Text>
         </Form.Group>
 
         <Form.Group controlId="formBasicEmail">
