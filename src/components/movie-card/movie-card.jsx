@@ -1,5 +1,5 @@
 import React from 'react';
-import propTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
 import { Button, Card } from 'react-bootstrap';
 
@@ -47,21 +47,21 @@ export class MovieCard extends React.Component {
 }
 
 MovieCard.propTypes = {
-  movie: propTypes.shape({
-    Title: propTypes.string.isRequired,
-    Description: propTypes.string.isRequired,
-    ImagePath: propTypes.string.isRequired,
-    Genre: propTypes.shape({
-      Name: propTypes.string.isRequired,
-      Description: propTypes.string.isRequired
+  movie: PropTypes.shape({
+    Title: PropTypes.string.isRequired,
+    Description: PropTypes.string.isRequired,
+    ImagePath: PropTypes.string.isRequired,
+    Genre: PropTypes.shape({
+      Name: PropTypes.string.isRequired,
+      Description: PropTypes.string.isRequired
     }),
-    Director: propTypes.shape({
-      Name: propTypes.string.isRequired,
-      Bio: propTypes.string.isRequired,
-      Birth: propTypes.string.isRequired,
-      Death: propTypes.string
+    Director: PropTypes.shape({
+      Name: PropTypes.string.isRequired,
+      Bio: PropTypes.string.isRequired,
+      Birth: PropTypes.string.isRequired,
+      Death: PropTypes.string
     }),
-    Featured: propTypes.bool.isRequired
+    Featured: PropTypes.bool.isRequired
   }).isRequired,
-  onClick: propTypes.func.isRequired
+  onClick: PropTypes.func.isRequired
 };
