@@ -1,6 +1,10 @@
 import React from 'react';
 import propTypes from 'prop-types';
-import { Button, Card, CardGroup, Container } from 'react-bootstrap';
+
+import { Button, Card } from 'react-bootstrap';
+
+import './movie-card.scss';
+
 
 export class MovieCard extends React.Component {
   render() {
@@ -10,16 +14,34 @@ export class MovieCard extends React.Component {
     const { movie, onClick } = this.props;
 
     return (
-      <CardGroup>
-        <Card style={{ width: '15rem' }}>
-          <Card.Img variant="top" src={movie.ImagePath} />
-          <Card.Body>
-            <Card.Title>{movie.Title}</Card.Title>
-            <Card.Text>{movie.Description}</Card.Text>
-            <Button onClick={() => onClick(movie)} variant="link">More</Button>
-          </Card.Body>
-        </Card>
-      </CardGroup>
+      <Card>
+        <Card.Img variant="top" src={movie.ImagePath} />
+        <Card.Body className="bg-dark">
+          <table className="main_div">
+            <tbody>
+              <tr>
+                <td valign="top">
+                  <Card.Title>{movie.Title}</Card.Title>
+                  <Card.Text>{movie.Description}</Card.Text>
+                </td>
+              </tr>
+              <tr valign="bottom" className="button-wrapper">
+                <td>
+                  <Button className="more-button" variant="primary" onClick={() => onClick(movie)}>
+                    More
+                  </Button>
+                  <Button className="favorite-button" variant="secondary" type="submit">
+                    Add to Favorites!
+                  </Button>
+                  <Button className="remove-button" variant="outline-danger" type="submit">
+                    Remove Favorite
+                  </Button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </Card.Body>
+      </Card>
     );
   }
 }
@@ -43,17 +65,3 @@ MovieCard.propTypes = {
   }).isRequired,
   onClick: propTypes.func.isRequired
 };
-
- /* 
-      <Card style={{ width: '20rem' }}>
-        <Card.Img variant="top" src={movie.ImagePath} />
-        <Card.Body>
-          <Card.Title>{movie.Title}</Card.Title>
-          <Card.Text>{movie.Description}</Card.Text>
-        </Card.Body>
-        <Card.Footer>
-          <Button onClick={() => onClick(movie)} variant="link">Open</Button>
-        </Card.Footer>
-      </Card>
- 
- */

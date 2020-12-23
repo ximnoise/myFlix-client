@@ -1,0 +1,15 @@
+.movie-view {
+  position: static;
+  text-align: start;
+}
+
+.movie-poster {
+  max-height: 400px;
+}
+
+.movie-genre,
+.movie-director {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}

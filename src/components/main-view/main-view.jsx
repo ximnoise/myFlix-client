@@ -1,12 +1,12 @@
 import React from 'react';
 import axios from 'axios';
 
-import { Row, Col } from 'react-bootstrap';
-
 import { LoginView } from '../login-view/login-view';
 import { RegistrationView } from '../registration-view/registration-view';
 import { MovieCard } from '../movie-card/movie-card';
 import { MovieView } from '../movie-view/movie-view';
+
+import './main-view.scss';
 
 
 export class MainView extends React.Component {
@@ -88,16 +88,12 @@ export class MainView extends React.Component {
       // will be returned otherwise, all movies will be returned
       <div className="main-container">
         <div className="main-view">
-          <Row>
-            {selectedMovie 
-              ? <MovieView movie={selectedMovie} goBack={() => this.goBack()}/>
-              : movies.map(movie => (
-                <Col sm={4} key={movie._id}>
-                  <MovieCard key={movie._id} movie={movie} onClick={movie => this.onMovieClick(movie)}/>
-                </Col>
-              ))
-            }
-          </Row>
+          {selectedMovie 
+            ? <MovieView movie={selectedMovie} goBack={() => this.goBack()}/>
+            : movies.map(movie => (
+              <MovieCard key={movie._id} movie={movie} onClick={movie => this.onMovieClick(movie)}/>
+            ))
+          }
         </div>
       </div>
     );
