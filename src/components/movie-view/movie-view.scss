@@ -1,6 +1,8 @@
 .movie-view {
   position: static;
-  text-align: start;
+  text-align: center;
+  padding-left: 15px;
+  padding-right: 15px;
 }
 
 .movie-poster {
@@ -10,6 +12,6 @@
 .movie-genre,
 .movie-director {
   display: flex;
-  justify-content: left;
+  justify-content: center;
   align-items: center;
 }

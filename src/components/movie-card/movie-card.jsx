@@ -17,29 +17,19 @@ export class MovieCard extends React.Component {
       <Card>
         <Card.Img variant="top" src={movie.ImagePath} />
         <Card.Body className="bg-dark">
-          <table className="main_div">
-            <tbody>
-              <tr>
-                <td valign="top">
-                  <Card.Title>{movie.Title}</Card.Title>
-                  <Card.Text>{movie.Description}</Card.Text>
-                </td>
-              </tr>
-              <tr valign="bottom" className="button-wrapper">
-                <td>
-                  <Button className="more-button" variant="primary" onClick={() => onClick(movie)}>
-                    More
-                  </Button>
-                  <Button className="favorite-button" variant="secondary" type="submit">
-                    Add to Favorites!
-                  </Button>
-                  <Button className="remove-button" variant="outline-danger" type="submit">
-                    Remove Favorite
-                  </Button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <Card.Title>{movie.Title}</Card.Title>
+          <Card.Text>{movie.Description}</Card.Text>
+          <div className="button-wrapper">
+            <Button className="more-button" variant="primary" onClick={() => onClick(movie)}>
+              More
+            </Button>
+            <Button className="favorite-button" variant="secondary" type="submit">
+              Add to Favorites!
+            </Button>
+            <Button className="remove-button" variant="outline-danger" type="submit">
+              Remove Favorite
+            </Button>
+          </div>
         </Card.Body>
       </Card>
     );
@@ -65,3 +55,37 @@ MovieCard.propTypes = {
   }).isRequired,
   onClick: PropTypes.func.isRequired
 };
+
+/*
+
+      <Card>
+        <Card.Img variant="top" src={movie.ImagePath} />
+        <Card.Body className="bg-dark">
+          <table className="main_div">
+            <tbody>
+              <tr>
+                <td valign="top">
+                  <Card.Title>{movie.Title}</Card.Title>
+                  <Card.Text>{movie.Description}</Card.Text>
+                </td>
+              </tr>
+              <tr valign="bottom" className="button-wrapper">
+                <td>
+                  <Button className="more-button" variant="primary" onClick={() => onClick(movie)}>
+                    More
+                  </Button>
+                  <Button className="favorite-button" variant="secondary" type="submit">
+                    Add to Favorites!
+                  </Button>
+                  <Button className="remove-button" variant="outline-danger" type="submit">
+                    Remove Favorite
+                  </Button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </Card.Body>
+      </Card>
+
+
+*/

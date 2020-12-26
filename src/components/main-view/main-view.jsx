@@ -6,6 +6,8 @@ import { RegistrationView } from '../registration-view/registration-view';
 import { MovieCard } from '../movie-card/movie-card';
 import { MovieView } from '../movie-view/movie-view';
 
+import { Container, Row, Col } from 'react-bootstrap';
+
 import './main-view.scss';
 
 
@@ -86,7 +88,25 @@ export class MainView extends React.Component {
     return (
       // If the state of `selectedMovie` is not null, that selected movie
       // will be returned otherwise, all movies will be returned
-      <div className="main-container">
+      <Container fluid="md" className="container">
+        <Row className="justify-content-md-center">
+          {selectedMovie 
+            ? <MovieView movie={selectedMovie} goBack={() => this.goBack()}/>
+            : movies.map(movie => (
+              <Col xs="auto" key={movie._id}>
+                <MovieCard movie={movie} onClick={movie => this.onMovieClick(movie)}/>
+              </Col>
+            ))
+          }
+        </Row>
+      </Container>
+    );
+  }
+}
+
+/* 
+
+      <Container>
         <div className="main-view">
           {selectedMovie 
             ? <MovieView movie={selectedMovie} goBack={() => this.goBack()}/>
@@ -95,7 +115,6 @@ export class MainView extends React.Component {
             ))
           }
         </div>
-      </div>
-    );
-  }
-}
+      </Container>
+
+*/

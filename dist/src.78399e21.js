@@ -48004,14 +48004,9 @@ var MovieCard = /*#__PURE__*/function (_React$Component) {
         src: movie.ImagePath
       }), _react.default.createElement(_reactBootstrap.Card.Body, {
         className: "bg-dark"
-      }, _react.default.createElement("table", {
-        className: "main_div"
-      }, _react.default.createElement("tbody", null, _react.default.createElement("tr", null, _react.default.createElement("td", {
-        valign: "top"
-      }, _react.default.createElement(_reactBootstrap.Card.Title, null, movie.Title), _react.default.createElement(_reactBootstrap.Card.Text, null, movie.Description))), _react.default.createElement("tr", {
-        valign: "bottom",
+      }, _react.default.createElement(_reactBootstrap.Card.Title, null, movie.Title), _react.default.createElement(_reactBootstrap.Card.Text, null, movie.Description), _react.default.createElement("div", {
         className: "button-wrapper"
-      }, _react.default.createElement("td", null, _react.default.createElement(_reactBootstrap.Button, {
+      }, _react.default.createElement(_reactBootstrap.Button, {
         className: "more-button",
         variant: "primary",
         onClick: function onClick() {
@@ -48025,7 +48020,7 @@ var MovieCard = /*#__PURE__*/function (_React$Component) {
         className: "remove-button",
         variant: "outline-danger",
         type: "submit"
-      }, "Remove Favorite")))))));
+      }, "Remove Favorite"))));
     }
   }]);
 
@@ -48052,6 +48047,39 @@ MovieCard.propTypes = {
   }).isRequired,
   onClick: _propTypes.default.func.isRequired
 };
+/*
+
+      <Card>
+        <Card.Img variant="top" src={movie.ImagePath} />
+        <Card.Body className="bg-dark">
+          <table className="main_div">
+            <tbody>
+              <tr>
+                <td valign="top">
+                  <Card.Title>{movie.Title}</Card.Title>
+                  <Card.Text>{movie.Description}</Card.Text>
+                </td>
+              </tr>
+              <tr valign="bottom" className="button-wrapper">
+                <td>
+                  <Button className="more-button" variant="primary" onClick={() => onClick(movie)}>
+                    More
+                  </Button>
+                  <Button className="favorite-button" variant="secondary" type="submit">
+                    Add to Favorites!
+                  </Button>
+                  <Button className="remove-button" variant="outline-danger" type="submit">
+                    Remove Favorite
+                  </Button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </Card.Body>
+      </Card>
+
+
+*/
 },{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","react-bootstrap":"../node_modules/react-bootstrap/esm/index.js","./movie-card.scss":"components/movie-card/movie-card.scss"}],"components/movie-view/movie-view.scss":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
@@ -48187,6 +48215,8 @@ var _movieCard = require("../movie-card/movie-card");
 
 var _movieView = require("../movie-view/movie-view");
 
+var _reactBootstrap = require("react-bootstrap");
+
 require("./main-view.scss");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -48316,23 +48346,26 @@ var MainView = /*#__PURE__*/function (_React$Component) {
       });
       return (// If the state of `selectedMovie` is not null, that selected movie
         // will be returned otherwise, all movies will be returned
-        _react.default.createElement("div", {
-          className: "main-container"
-        }, _react.default.createElement("div", {
-          className: "main-view"
+        _react.default.createElement(_reactBootstrap.Container, {
+          fluid: "md",
+          className: "container"
+        }, _react.default.createElement(_reactBootstrap.Row, {
+          className: "justify-content-md-center"
         }, selectedMovie ? _react.default.createElement(_movieView.MovieView, {
           movie: selectedMovie,
           goBack: function goBack() {
             return _this3.goBack();
           }
         }) : movies.map(function (movie) {
-          return _react.default.createElement(_movieCard.MovieCard, {
-            key: movie._id,
+          return _react.default.createElement(_reactBootstrap.Col, {
+            xs: "auto",
+            key: movie._id
+          }, _react.default.createElement(_movieCard.MovieCard, {
             movie: movie,
             onClick: function onClick(movie) {
               return _this3.onMovieClick(movie);
             }
-          });
+          }));
         })))
       );
     }
@@ -48340,9 +48373,24 @@ var MainView = /*#__PURE__*/function (_React$Component) {
 
   return MainView;
 }(_react.default.Component);
+/* 
+
+      <Container>
+        <div className="main-view">
+          {selectedMovie 
+            ? <MovieView movie={selectedMovie} goBack={() => this.goBack()}/>
+            : movies.map(movie => (
+              <MovieCard key={movie._id} movie={movie} onClick={movie => this.onMovieClick(movie)}/>
+            ))
+          }
+        </div>
+      </Container>
+
+*/
+
 
 exports.MainView = MainView;
-},{"react":"../node_modules/react/index.js","axios":"../node_modules/axios/index.js","../login-view/login-view":"components/login-view/login-view.jsx","../registration-view/registration-view":"components/registration-view/registration-view.jsx","../movie-card/movie-card":"components/movie-card/movie-card.jsx","../movie-view/movie-view":"components/movie-view/movie-view.jsx","./main-view.scss":"components/main-view/main-view.scss"}],"index.scss":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","axios":"../node_modules/axios/index.js","../login-view/login-view":"components/login-view/login-view.jsx","../registration-view/registration-view":"components/registration-view/registration-view.jsx","../movie-card/movie-card":"components/movie-card/movie-card.jsx","../movie-view/movie-view":"components/movie-view/movie-view.jsx","react-bootstrap":"../node_modules/react-bootstrap/esm/index.js","./main-view.scss":"components/main-view/main-view.scss"}],"index.scss":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -48436,7 +48484,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49680" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55540" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

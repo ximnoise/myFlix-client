@@ -1,3 +1,8 @@
+.card {
+  width: 18rem;
+  margin-bottom: 10px;
+}
+
 .card-text {
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -12,8 +17,7 @@
 
 .card-img-top {
   width: 100%;
-  height: 25vw;
-  object-fit: cover;
+  height: 420px;
 }
 
 .card-title {
@@ -31,11 +35,6 @@
   align-items: flex-end;
   flex-wrap: wrap;
 }
-.main_div {
-  height: 100%;
-  width: 100%;
-  border-collapse: collapse;
-}
 
 .more-button {
   margin-bottom: 7px;
@@ -46,3 +45,5 @@
   margin-bottom: 7px;
   right: 20px;
 }
+
+
