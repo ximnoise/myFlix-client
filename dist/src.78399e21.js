@@ -48336,6 +48336,12 @@ var MainView = /*#__PURE__*/function (_React$Component) {
       this.getMovies(authData.token);
     }
   }, {
+    key: "onLoggedOut",
+    value: function onLoggedOut() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+    }
+  }, {
     key: "onRegistration",
     value: function onRegistration(email) {
       this.setState({
@@ -48377,7 +48383,10 @@ var MainView = /*#__PURE__*/function (_React$Component) {
         _react.default.createElement(_reactBootstrap.Container, {
           fluid: "md",
           className: "container"
-        }, _react.default.createElement(_reactBootstrap.Row, {
+        }, _react.default.createElement(_reactBootstrap.Button, {
+          variant: "outline-danger",
+          onClick: this.onLoggedOut
+        }, "Log Out"), _react.default.createElement(_reactBootstrap.Row, {
           className: "justify-content-md-center"
         }, selectedMovie ? _react.default.createElement(_movieView.MovieView, {
           movie: selectedMovie,
@@ -48512,7 +48521,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49965" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49694" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

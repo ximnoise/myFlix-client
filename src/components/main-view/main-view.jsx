@@ -6,7 +6,7 @@ import { RegistrationView } from '../registration-view/registration-view';
 import { MovieCard } from '../movie-card/movie-card';
 import { MovieView } from '../movie-view/movie-view';
 
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Button, Row, Col } from 'react-bootstrap';
 
 import './main-view.scss';
 
@@ -80,6 +80,11 @@ export class MainView extends React.Component {
     this.getMovies(authData.token);
   }
 
+  onLoggedOut() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+  }
+
   onRegistration(email) {
     this.setState({
       email
@@ -106,6 +111,7 @@ export class MainView extends React.Component {
       // If the state of `selectedMovie` is not null, that selected movie
       // will be returned otherwise, all movies will be returned
       <Container fluid="md" className="container">
+        <Button variant="outline-danger" onClick={this.onLoggedOut}>Log Out</Button>
         <Row className="justify-content-md-center">
           {selectedMovie 
             ? <MovieView movie={selectedMovie} goBack={() => this.goBack()}/>
