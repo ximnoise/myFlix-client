@@ -21,10 +21,8 @@ export class MainView extends React.Component {
 
     // Initial state is set to null
     this.state = {
-      movies: null,
-      selectedMovie: null,
-      user: null,
-      email: null
+      movies: [],
+      user: null
     };
   }
 
@@ -53,22 +51,6 @@ export class MainView extends React.Component {
     });
   }
 
-  // When a movie is clicked, this function is invoked and updates
-  // the state of the `selectedMovie` property to that movie
-  onMovieClick(movie) {
-    this.setState({
-      selectedMovie: movie
-    });
-  }
-
-  // When back button on movie view clicked, set state to null
-  // and go back to movie list 
-  goBack() {
-    this.setState({
-      selectedMovie: null
-    });
-  }
-
   // When a user successfully logs in, this function updates
   // the `user` property in state to that particular user
   onLoggedIn(authData) {
@@ -87,59 +69,37 @@ export class MainView extends React.Component {
     localStorage.removeItem('user');
   }
 
-  onRegistration(email) {
-    this.setState({
-      email
-    });
-  }
-
   // This overrides the render() method of the superclass
   // No need to call super() though, as it does nothing by default
   render() {
     // If the state isn't initialized, this will throw on runtime
     // before the data is initially loaded
-    const { movies, selectedMovie, user, email } = this.state;
-
-    if (!email) return <RegistrationView onRegistration={email => this.onRegistration(email)} />;
-
-    // If there is no user, the LoginView is rendered.
-    // If there is a user logged in, the user details are passed as a prop to the LoginView
-    if (!user) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
+    const { movies, user } = this.state;
 
     // Before the movies have been loaded
     if (!movies) return <div className="main-view"/>;
 
     return (
-      // If the state of `selectedMovie` is not null, that selected movie
-      // will be returned otherwise, all movies will be returned
-      <Container fluid="md" className="container">
-        <Button variant="outline-danger" onClick={this.onLoggedOut}>Log Out</Button>
-        <Row className="justify-content-md-center">
-          {selectedMovie 
-            ? <MovieView movie={selectedMovie} goBack={() => this.goBack()}/>
-            : movies.map(movie => (
-              <Col xs="auto" key={movie._id}>
-                <MovieCard movie={movie} onClick={movie => this.onMovieClick(movie)}/>
+      <Router>
+        <Container fluid="md" className="container">
+          <Button variant="outline-danger" onClick={this.onLoggedOut}>Log Out</Button>
+          <p>{user}</p>
+          <Row className="justify-content-md-center">
+            <Route exact path="/" render={() => {
+              if (!user) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
+              return movies.map(m => 
+              <Col xs="auto" key={m._id}>
+                <MovieCard movie={m} />
               </Col>
-            ))
-          }
-        </Row>
-      </Container>
+              )}
+            }/>
+            <Route path="/register" render={() => <RegistrationView /> }/>
+            <Route path="/movies/:movieId" render={({match}) => 
+              <MovieView movie={movies.find(m => m._id === match.params.movieId)} />
+            }/>
+          </Row>
+        </Container>
+      </Router>
     );
   }
 }
-
-/* 
-
-      <Container>
-        <div className="main-view">
-          {selectedMovie 
-            ? <MovieView movie={selectedMovie} goBack={() => this.goBack()}/>
-            : movies.map(movie => (
-              <MovieCard key={movie._id} movie={movie} onClick={movie => this.onMovieClick(movie)}/>
-            ))
-          }
-        </div>
-      </Container>
-
-*/

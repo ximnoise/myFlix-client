@@ -50897,9 +50897,13 @@ exports.RegistrationView = RegistrationView;
 
 var _react = _interopRequireWildcard(require("react"));
 
+var _axios = _interopRequireDefault(require("axios"));
+
 var _reactBootstrap = require("react-bootstrap");
 
 require("./registration-view.scss");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
 
@@ -50940,10 +50944,21 @@ function RegistrationView(props) {
 
   var handleSubmit = function handleSubmit(e) {
     e.preventDefault();
-    console.log(username, password, email, birthday); // Send a request to the server for authentication
-    // then call props.onLoggedIn(username)
 
-    props.onRegistration(email);
+    _axios.default.post('https://primedome.herokuapp.com/users', {
+      Username: username,
+      Password: password,
+      Email: email,
+      Birthday: birthday
+    }).then(function (response) {
+      var data = response.data;
+      console.log(data); // the second argument '_self' is necessary so that page will
+      // open in the current tab
+
+      window.open('/', '_self');
+    }).catch(function (e) {
+      console.log('error registering the user');
+    });
   };
 
   return _react.default.createElement(_reactBootstrap.Container, null, _react.default.createElement(_reactBootstrap.Form, {
@@ -50992,7 +51007,7 @@ function RegistrationView(props) {
     onClick: handleSubmit
   }, "Register")));
 }
-},{"react":"../node_modules/react/index.js","react-bootstrap":"../node_modules/react-bootstrap/esm/index.js","./registration-view.scss":"components/registration-view/registration-view.scss"}],"components/movie-card/movie-card.scss":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","axios":"../node_modules/axios/index.js","react-bootstrap":"../node_modules/react-bootstrap/esm/index.js","./registration-view.scss":"components/registration-view/registration-view.scss"}],"components/movie-card/movie-card.scss":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -51008,6 +51023,8 @@ exports.MovieCard = void 0;
 var _react = _interopRequireDefault(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _reactRouterDom = require("react-router-dom");
 
 var _reactBootstrap = require("react-bootstrap");
 
@@ -51054,9 +51071,7 @@ var MovieCard = /*#__PURE__*/function (_React$Component) {
       // This is given to the <MovieCard/> component by the outer world
       // which, in this case, is `MainView`, as `MainView` is what’s
       // connected to your database via the movies endpoint of your API
-      var _this$props = this.props,
-          movie = _this$props.movie,
-          _onClick = _this$props.onClick;
+      var movie = this.props.movie;
       return _react.default.createElement(_reactBootstrap.Card, null, _react.default.createElement(_reactBootstrap.Card.Img, {
         variant: "top",
         src: movie.ImagePath
@@ -51064,13 +51079,12 @@ var MovieCard = /*#__PURE__*/function (_React$Component) {
         className: "bg-dark"
       }, _react.default.createElement(_reactBootstrap.Card.Title, null, movie.Title), _react.default.createElement(_reactBootstrap.Card.Text, null, movie.Description), _react.default.createElement("div", {
         className: "button-wrapper"
+      }, _react.default.createElement(_reactRouterDom.Link, {
+        to: "/movies/".concat(movie._id)
       }, _react.default.createElement(_reactBootstrap.Button, {
         className: "more-button",
-        variant: "primary",
-        onClick: function onClick() {
-          return _onClick(movie);
-        }
-      }, "More"), _react.default.createElement(_reactBootstrap.Button, {
+        variant: "primary"
+      }, "More")), _react.default.createElement(_reactBootstrap.Button, {
         className: "favorite-button",
         variant: "secondary",
         type: "submit"
@@ -51102,43 +51116,9 @@ MovieCard.propTypes = {
       Death: _propTypes.default.string
     }),
     Featured: _propTypes.default.bool.isRequired
-  }).isRequired,
-  onClick: _propTypes.default.func.isRequired
+  }).isRequired
 };
-/*
-
-      <Card>
-        <Card.Img variant="top" src={movie.ImagePath} />
-        <Card.Body className="bg-dark">
-          <table className="main_div">
-            <tbody>
-              <tr>
-                <td valign="top">
-                  <Card.Title>{movie.Title}</Card.Title>
-                  <Card.Text>{movie.Description}</Card.Text>
-                </td>
-              </tr>
-              <tr valign="bottom" className="button-wrapper">
-                <td>
-                  <Button className="more-button" variant="primary" onClick={() => onClick(movie)}>
-                    More
-                  </Button>
-                  <Button className="favorite-button" variant="secondary" type="submit">
-                    Add to Favorites!
-                  </Button>
-                  <Button className="remove-button" variant="outline-danger" type="submit">
-                    Remove Favorite
-                  </Button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </Card.Body>
-      </Card>
-
-
-*/
-},{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","react-bootstrap":"../node_modules/react-bootstrap/esm/index.js","./movie-card.scss":"components/movie-card/movie-card.scss"}],"components/movie-view/movie-view.scss":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","react-bootstrap":"../node_modules/react-bootstrap/esm/index.js","./movie-card.scss":"components/movie-card/movie-card.scss"}],"components/movie-view/movie-view.scss":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -51152,6 +51132,8 @@ Object.defineProperty(exports, "__esModule", {
 exports.MovieView = void 0;
 
 var _react = _interopRequireDefault(require("react"));
+
+var _reactRouterDom = require("react-router-dom");
 
 var _reactBootstrap = require("react-bootstrap");
 
@@ -51199,9 +51181,7 @@ var MovieView = /*#__PURE__*/function (_React$Component) {
   _createClass(MovieView, [{
     key: "render",
     value: function render() {
-      var _this$props = this.props,
-          movie = _this$props.movie,
-          goBack = _this$props.goBack;
+      var movie = this.props.movie;
       if (!movie) return null;
       return _react.default.createElement("div", {
         className: "movie-view"
@@ -51224,20 +51204,23 @@ var MovieView = /*#__PURE__*/function (_React$Component) {
         className: "movie-genre"
       }, _react.default.createElement("span", {
         className: "label"
-      }, "Genre:"), _react.default.createElement(_reactBootstrap.Button, {
+      }, "Genre:"), _react.default.createElement(_reactRouterDom.Link, {
+        to: "/directors/".concat(movie.Genre.Name)
+      }, _react.default.createElement(_reactBootstrap.Button, {
         variant: "link"
-      }, movie.Genre.Name)), _react.default.createElement("div", {
+      }, movie.Genre.Name))), _react.default.createElement("div", {
         className: "movie-director"
       }, _react.default.createElement("span", {
         className: "label"
-      }, "Director:"), _react.default.createElement(_reactBootstrap.Button, {
+      }, "Director:"), _react.default.createElement(_reactRouterDom.Link, {
+        to: "/genres/".concat(movie.Director.Name)
+      }, _react.default.createElement(_reactBootstrap.Button, {
         variant: "link"
-      }, movie.Director.Name)), _react.default.createElement(_reactBootstrap.Button, {
-        onClick: function onClick() {
-          return goBack();
-        },
+      }, movie.Director.Name))), _react.default.createElement(_reactRouterDom.Link, {
+        to: '/'
+      }, _react.default.createElement(_reactBootstrap.Button, {
         variant: "outline-danger"
-      }, "Back"), _react.default.createElement(_reactBootstrap.Button, {
+      }, "Back")), _react.default.createElement(_reactBootstrap.Button, {
         variant: "primary",
         type: "submit"
       }, "Add to Favorites!"));
@@ -51248,7 +51231,7 @@ var MovieView = /*#__PURE__*/function (_React$Component) {
 }(_react.default.Component);
 
 exports.MovieView = MovieView;
-},{"react":"../node_modules/react/index.js","react-bootstrap":"../node_modules/react-bootstrap/esm/index.js","./movie-view.scss":"components/movie-view/movie-view.scss"}],"components/main-view/main-view.scss":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","react-bootstrap":"../node_modules/react-bootstrap/esm/index.js","./movie-view.scss":"components/movie-view/movie-view.scss"}],"components/main-view/main-view.scss":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -51318,10 +51301,8 @@ var MainView = /*#__PURE__*/function (_React$Component) {
     _this = _super.call(this); // Initial state is set to null
 
     _this.state = {
-      movies: null,
-      selectedMovie: null,
-      user: null,
-      email: null
+      movies: [],
+      user: null
     };
     return _this;
   }
@@ -51355,24 +51336,6 @@ var MainView = /*#__PURE__*/function (_React$Component) {
       }).catch(function (error) {
         console.log(error);
       });
-    } // When a movie is clicked, this function is invoked and updates
-    // the state of the `selectedMovie` property to that movie
-
-  }, {
-    key: "onMovieClick",
-    value: function onMovieClick(movie) {
-      this.setState({
-        selectedMovie: movie
-      });
-    } // When back button on movie view clicked, set state to null
-    // and go back to movie list 
-
-  }, {
-    key: "goBack",
-    value: function goBack() {
-      this.setState({
-        selectedMovie: null
-      });
     } // When a user successfully logs in, this function updates
     // the `user` property in state to that particular user
 
@@ -51392,13 +51355,6 @@ var MainView = /*#__PURE__*/function (_React$Component) {
     value: function onLoggedOut() {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
-    }
-  }, {
-    key: "onRegistration",
-    value: function onRegistration(email) {
-      this.setState({
-        email: email
-      });
     } // This overrides the render() method of the superclass
     // No need to call super() though, as it does nothing by default
 
@@ -51411,72 +51367,58 @@ var MainView = /*#__PURE__*/function (_React$Component) {
       // before the data is initially loaded
       var _this$state = this.state,
           movies = _this$state.movies,
-          selectedMovie = _this$state.selectedMovie,
-          user = _this$state.user,
-          email = _this$state.email;
-      if (!email) return _react.default.createElement(_registrationView.RegistrationView, {
-        onRegistration: function onRegistration(email) {
-          return _this3.onRegistration(email);
-        }
-      }); // If there is no user, the LoginView is rendered.
-      // If there is a user logged in, the user details are passed as a prop to the LoginView
-
-      if (!user) return _react.default.createElement(_loginView.LoginView, {
-        onLoggedIn: function onLoggedIn(user) {
-          return _this3.onLoggedIn(user);
-        }
-      }); // Before the movies have been loaded
+          user = _this$state.user; // Before the movies have been loaded
 
       if (!movies) return _react.default.createElement("div", {
         className: "main-view"
       });
-      return (// If the state of `selectedMovie` is not null, that selected movie
-        // will be returned otherwise, all movies will be returned
-        _react.default.createElement(_reactBootstrap.Container, {
-          fluid: "md",
-          className: "container"
-        }, _react.default.createElement(_reactBootstrap.Button, {
-          variant: "outline-danger",
-          onClick: this.onLoggedOut
-        }, "Log Out"), _react.default.createElement(_reactBootstrap.Row, {
-          className: "justify-content-md-center"
-        }, selectedMovie ? _react.default.createElement(_movieView.MovieView, {
-          movie: selectedMovie,
-          goBack: function goBack() {
-            return _this3.goBack();
-          }
-        }) : movies.map(function (movie) {
-          return _react.default.createElement(_reactBootstrap.Col, {
-            xs: "auto",
-            key: movie._id
-          }, _react.default.createElement(_movieCard.MovieCard, {
-            movie: movie,
-            onClick: function onClick(movie) {
-              return _this3.onMovieClick(movie);
+      return _react.default.createElement(_reactRouterDom.BrowserRouter, null, _react.default.createElement(_reactBootstrap.Container, {
+        fluid: "md",
+        className: "container"
+      }, _react.default.createElement(_reactBootstrap.Button, {
+        variant: "outline-danger",
+        onClick: this.onLoggedOut
+      }, "Log Out"), _react.default.createElement("p", null, user), _react.default.createElement(_reactBootstrap.Row, {
+        className: "justify-content-md-center"
+      }, _react.default.createElement(_reactRouterDom.Route, {
+        exact: true,
+        path: "/",
+        render: function render() {
+          if (!user) return _react.default.createElement(_loginView.LoginView, {
+            onLoggedIn: function onLoggedIn(user) {
+              return _this3.onLoggedIn(user);
             }
-          }));
-        })))
-      );
+          });
+          return movies.map(function (m) {
+            return _react.default.createElement(_reactBootstrap.Col, {
+              xs: "auto",
+              key: m._id
+            }, _react.default.createElement(_movieCard.MovieCard, {
+              movie: m
+            }));
+          });
+        }
+      }), _react.default.createElement(_reactRouterDom.Route, {
+        path: "/register",
+        render: function render() {
+          return _react.default.createElement(_registrationView.RegistrationView, null);
+        }
+      }), _react.default.createElement(_reactRouterDom.Route, {
+        path: "/movies/:movieId",
+        render: function render(_ref) {
+          var match = _ref.match;
+          return _react.default.createElement(_movieView.MovieView, {
+            movie: movies.find(function (m) {
+              return m._id === match.params.movieId;
+            })
+          });
+        }
+      }))));
     }
   }]);
 
   return MainView;
 }(_react.default.Component);
-/* 
-
-      <Container>
-        <div className="main-view">
-          {selectedMovie 
-            ? <MovieView movie={selectedMovie} goBack={() => this.goBack()}/>
-            : movies.map(movie => (
-              <MovieCard key={movie._id} movie={movie} onClick={movie => this.onMovieClick(movie)}/>
-            ))
-          }
-        </div>
-      </Container>
-
-*/
-
 
 exports.MainView = MainView;
 },{"react":"../node_modules/react/index.js","axios":"../node_modules/axios/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","../login-view/login-view":"components/login-view/login-view.jsx","../registration-view/registration-view":"components/registration-view/registration-view.jsx","../movie-card/movie-card":"components/movie-card/movie-card.jsx","../movie-view/movie-view":"components/movie-view/movie-view.jsx","react-bootstrap":"../node_modules/react-bootstrap/esm/index.js","./main-view.scss":"components/main-view/main-view.scss"}],"index.scss":[function(require,module,exports) {
@@ -51573,7 +51515,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50522" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50288" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

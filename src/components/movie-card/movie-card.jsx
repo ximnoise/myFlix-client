@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { Link } from 'react-router-dom';
+
 import { Button, Card } from 'react-bootstrap';
 
 import './movie-card.scss';
@@ -11,7 +13,7 @@ export class MovieCard extends React.Component {
     // This is given to the <MovieCard/> component by the outer world
     // which, in this case, is `MainView`, as `MainView` is what’s
     // connected to your database via the movies endpoint of your API
-    const { movie, onClick } = this.props;
+    const { movie } = this.props;
 
     return (
       <Card>
@@ -20,9 +22,9 @@ export class MovieCard extends React.Component {
           <Card.Title>{movie.Title}</Card.Title>
           <Card.Text>{movie.Description}</Card.Text>
           <div className="button-wrapper">
-            <Button className="more-button" variant="primary" onClick={() => onClick(movie)}>
-              More
-            </Button>
+            <Link to={`/movies/${movie._id}`}>
+              <Button className="more-button" variant="primary">More</Button>
+            </Link>
             <Button className="favorite-button" variant="secondary" type="submit">
               Add to Favorites!
             </Button>
@@ -52,40 +54,5 @@ MovieCard.propTypes = {
       Death: PropTypes.string
     }),
     Featured: PropTypes.bool.isRequired
-  }).isRequired,
-  onClick: PropTypes.func.isRequired
+  }).isRequired
 };
-
-/*
-
-      <Card>
-        <Card.Img variant="top" src={movie.ImagePath} />
-        <Card.Body className="bg-dark">
-          <table className="main_div">
-            <tbody>
-              <tr>
-                <td valign="top">
-                  <Card.Title>{movie.Title}</Card.Title>
-                  <Card.Text>{movie.Description}</Card.Text>
-                </td>
-              </tr>
-              <tr valign="bottom" className="button-wrapper">
-                <td>
-                  <Button className="more-button" variant="primary" onClick={() => onClick(movie)}>
-                    More
-                  </Button>
-                  <Button className="favorite-button" variant="secondary" type="submit">
-                    Add to Favorites!
-                  </Button>
-                  <Button className="remove-button" variant="outline-danger" type="submit">
-                    Remove Favorite
-                  </Button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </Card.Body>
-      </Card>
-
-
-*/

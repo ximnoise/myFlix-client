@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+
 import { Form, Button, Container}  from 'react-bootstrap';
+
 import './registration-view.scss';
 
 export function RegistrationView(props) {
@@ -10,10 +13,22 @@ export function RegistrationView(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(username, password, email, birthday);
-    // Send a request to the server for authentication
-    // then call props.onLoggedIn(username)
-    props.onRegistration(email);
+    axios.post('https://primedome.herokuapp.com/users', {
+      Username: username,
+      Password: password,
+      Email: email,
+      Birthday: birthday
+    })
+    .then(response => {
+      const data = response.data;
+      console.log(data);
+      // the second argument '_self' is necessary so that page will
+      // open in the current tab
+      window.open('/', '_self'); 
+    })
+    .catch(e => {
+      console.log('error registering the user')
+    });
   };
 
   return (
@@ -28,7 +43,6 @@ export function RegistrationView(props) {
             onChange={(e) => setUsername(e.target.value)}
           />
         </Form.Group>
-
         <Form.Group controlId="formBasicEmail">
           <Form.Label>Email</Form.Label>
           <Form.Control
@@ -41,7 +55,6 @@ export function RegistrationView(props) {
             We'll never share your email with anyone else.
           </Form.Text>
         </Form.Group>
-
         <Form.Group controlId="formBasicBirthday">
           <Form.Label>Birthday</Form.Label>
           <Form.Control
@@ -51,7 +64,6 @@ export function RegistrationView(props) {
             onChange={(e) => setBirthday(e.target.value)}
           />
         </Form.Group>
-
         <Form.Group controlId="formBasicPassword">
           <Form.Label>Password</Form.Label>
           <Form.Control
@@ -61,7 +73,6 @@ export function RegistrationView(props) {
             onChange={(e) => setPassword(e.target.value)}
           />
         </Form.Group>
-
         <Button variant="primary" type="submit" onClick={handleSubmit}>
           Register
         </Button>
