@@ -82,6 +82,18 @@
   justify-content: center;
   align-items: center;
 }
+.genre-view {
+  position: static;
+  text-align: center;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+.director-view {
+  position: static;
+  text-align: center;
+  padding-left: 15px;
+  padding-right: 15px;
+}
 .container {
   padding-top: 30px;
 }

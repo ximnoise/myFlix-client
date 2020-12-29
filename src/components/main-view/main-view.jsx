@@ -7,10 +7,14 @@ import { LoginView } from '../login-view/login-view';
 import { RegistrationView } from '../registration-view/registration-view';
 import { MovieCard } from '../movie-card/movie-card';
 import { MovieView } from '../movie-view/movie-view';
+import { GenreView } from '../genre-view/genre-view';
+import { DirectorView } from '../director-view/director-view';
 
 import { Container, Button, Row, Col } from 'react-bootstrap';
 
 import './main-view.scss';
+
+
 
 
 export class MainView extends React.Component {
@@ -87,7 +91,7 @@ export class MainView extends React.Component {
           <Row className="justify-content-md-center">
             <Route exact path="/" render={() => {
               if (!user) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
-              return movies.map(m => 
+              return movies.map((m) => 
               <Col xs="auto" key={m._id}>
                 <MovieCard movie={m} />
               </Col>
@@ -95,7 +99,15 @@ export class MainView extends React.Component {
             }/>
             <Route path="/register" render={() => <RegistrationView /> }/>
             <Route path="/movies/:movieId" render={({match}) => 
-              <MovieView movie={movies.find(m => m._id === match.params.movieId)} />
+              <MovieView movie={movies.find((m)=> m._id === match.params.movieId)} />
+            }/>
+            <Route path="/genres/:name" render={({match}) => 
+              <GenreView genre={movies.find((m) => m.Genre.Name === match.params.name).Genre}
+                movies={movies.filter((m) => m.Genre.Name === match.params.name)} />
+            }/>
+            <Route path="directors/:name" render={({match}) => 
+              <DirectorView director={movies.find((m) => m.Director.Name === match.params.name).Director}
+                movies={movies.filter((m) => m.Director.Name === match.params.name)} />
             }/>
           </Row>
         </Container>
