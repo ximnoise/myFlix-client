@@ -9,6 +9,7 @@ import { MovieCard } from '../movie-card/movie-card';
 import { MovieView } from '../movie-view/movie-view';
 import { GenreView } from '../genre-view/genre-view';
 import { DirectorView } from '../director-view/director-view';
+import { NavView } from '../nav-view/nav-view';
 
 import { Container, Button, Row, Col } from 'react-bootstrap';
 
@@ -68,11 +69,6 @@ export class MainView extends React.Component {
     this.getMovies(authData.token);
   }
 
-  onLoggedOut() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-  }
-
   // This overrides the render() method of the superclass
   // No need to call super() though, as it does nothing by default
   render() {
@@ -86,8 +82,7 @@ export class MainView extends React.Component {
     return (
       <Router>
         <Container fluid="md" className="container">
-          <Button variant="outline-danger" onClick={this.onLoggedOut}>Log Out</Button>
-          <p>{user}</p>
+          <NavView user={user} />
           <Row className="justify-content-md-center">
             <Route exact path="/" render={() => {
               if (!user) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;

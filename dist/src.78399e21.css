@@ -94,6 +94,9 @@
   padding-left: 15px;
   padding-right: 15px;
 }
+.navbar {
+  margin-bottom: 20px;
+}
 .container {
   padding-top: 30px;
 }
