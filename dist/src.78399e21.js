@@ -51306,13 +51306,13 @@ var GenreView = /*#__PURE__*/function (_React$Component) {
         className: "label"
       }, "Name: "), _react.default.createElement("span", {
         className: "value"
-      }, genre.Name)), _react.default.createElement("div", {
+      }, genre.Name)), _react.default.createElement("br", null), _react.default.createElement("div", {
         className: "genre-description"
       }, _react.default.createElement("span", {
         className: "label"
       }, "Description: "), _react.default.createElement("span", {
         className: "value"
-      }, genre.Description)), _react.default.createElement("div", {
+      }, genre.Description)), _react.default.createElement("br", null), _react.default.createElement("div", {
         className: "genre-movies"
       }, _react.default.createElement("span", {
         className: "label"
@@ -51320,7 +51320,7 @@ var GenreView = /*#__PURE__*/function (_React$Component) {
         return _react.default.createElement("div", {
           className: "movie",
           key: m._id
-        }, m.title);
+        }, m.Title);
       })), _react.default.createElement(_reactRouterDom.Link, {
         to: '/'
       }, _react.default.createElement(_reactBootstrap.Button, {
@@ -51408,13 +51408,25 @@ var DirectorView = /*#__PURE__*/function (_React$Component) {
         className: "label"
       }, "Name: "), _react.default.createElement("span", {
         className: "value"
-      }, director.Name)), _react.default.createElement("div", {
+      }, director.Name)), _react.default.createElement("br", null), _react.default.createElement("div", {
         className: "director-bio"
       }, _react.default.createElement("span", {
         className: "label"
       }, "Description: "), _react.default.createElement("span", {
         className: "value"
-      }, director.Bio)), _react.default.createElement("div", {
+      }, director.Bio)), _react.default.createElement("br", null), _react.default.createElement("div", {
+        className: "director-birth"
+      }, _react.default.createElement("span", {
+        className: "label"
+      }, "Birth: "), _react.default.createElement("span", {
+        className: "value"
+      }, director.Birth)), _react.default.createElement("br", null), _react.default.createElement("div", {
+        className: "director-death"
+      }, _react.default.createElement("span", {
+        className: "label"
+      }, "Death: "), _react.default.createElement("span", {
+        className: "value"
+      }, director.Death)), _react.default.createElement("br", null), _react.default.createElement("div", {
         className: "director-movies"
       }, _react.default.createElement("span", {
         className: "label"
@@ -51422,7 +51434,7 @@ var DirectorView = /*#__PURE__*/function (_React$Component) {
         return _react.default.createElement("div", {
           className: "movie",
           key: m._id
-        }, m.title);
+        }, m.Title);
       })), _react.default.createElement(_reactRouterDom.Link, {
         to: '/'
       }, _react.default.createElement(_reactBootstrap.Button, {
@@ -51433,6 +51445,12 @@ var DirectorView = /*#__PURE__*/function (_React$Component) {
 
   return DirectorView;
 }(_react.default.Component);
+/*
+          {movies.map((m) => (
+            <div className="movie" key={m._id}>{m.title}</div>
+          ))}
+*/
+
 
 exports.DirectorView = DirectorView;
 },{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","react-bootstrap":"../node_modules/react-bootstrap/esm/index.js","./director-view.scss":"components/director-view/director-view.scss"}],"components/main-view/main-view.scss":[function(require,module,exports) {
@@ -51635,9 +51653,12 @@ var MainView = /*#__PURE__*/function (_React$Component) {
           });
         }
       }), _react.default.createElement(_reactRouterDom.Route, {
-        path: "directors/:name",
+        path: "/directors/:name",
         render: function render(_ref3) {
           var match = _ref3.match;
+          if (!movies) return _react.default.createElement("div", {
+            className: "main-view"
+          });
           return _react.default.createElement(_directorView.DirectorView, {
             director: movies.find(function (m) {
               return m.Director.Name === match.params.name;
@@ -51749,7 +51770,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53092" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49528" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
