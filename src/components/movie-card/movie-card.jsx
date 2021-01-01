@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 
 import { Link } from 'react-router-dom';
 
@@ -9,11 +10,47 @@ import './movie-card.scss';
 
 
 export class MovieCard extends React.Component {
+  constructor(props) {
+    super(props);
+
+    let addFavorite = false;
+    if (props.addFavorite) {
+      addFavorite = true;
+    }
+
+    let removeFavorite = false;
+    if (props.removeFavorite) {
+      removeFavorite = true;
+    }
+
+    this.state = {
+      movie: this.props.movie,
+      username: props.user,
+      userToken: props.userToken,
+      addFavorite: addFavorite,
+      removeFavorite: removeFavorite,
+    };
+  }
+
+  addToFavorite() {
+    this.setState({
+      addFavorite: false
+    });
+    axios.post(`https://primedome.herokuapp.com/users/${this.state.username}/Movies/${this.state.movie._id}`, {
+      headers: { Authorization: `Bearer ${this.state.userToken}` }
+    })
+    .then((response) => {
+      console.log(response.data);
+      console.log('movie added');
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
+
   render() {
-    // This is given to the <MovieCard/> component by the outer world
-    // which, in this case, is `MainView`, as `MainView` is what’s
-    // connected to your database via the movies endpoint of your API
-    const { movie } = this.props;
+
+    const { movie } = this.props
 
     return (
       <Card>
@@ -25,12 +62,26 @@ export class MovieCard extends React.Component {
             <Link to={`/movies/${movie._id}`}>
               <Button className="more-button" variant="primary">More</Button>
             </Link>
-            <Button className="favorite-button" variant="secondary" type="submit">
-              Add to Favorites!
-            </Button>
-            <Button className="remove-button" variant="outline-danger" type="submit">
-              Remove Favorite
-            </Button>
+            {this.state.addFavorite && (
+              <Button 
+                className="favorite-button" 
+                variant="secondary" 
+                type="submit" 
+                onClick={this.addToFavorite}
+              >
+                Add Favorite
+              </Button>
+            )}
+            {this.state.removeFavorite && (
+              <Button 
+                className="remove-button" 
+                variant="outline-danger" 
+                type="submit" 
+                onClick={this.removeFromFavorite}
+              >
+                Remove Favorite
+              </Button>
+            )}
           </div>
         </Card.Body>
       </Card>

@@ -51020,9 +51020,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.MovieCard = void 0;
 
-var _react = _interopRequireDefault(require("react"));
+var _react = _interopRequireWildcard(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _axios = _interopRequireDefault(require("axios"));
 
 var _reactRouterDom = require("react-router-dom");
 
@@ -51031,6 +51033,10 @@ var _reactBootstrap = require("react-bootstrap");
 require("./movie-card.scss");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -51059,18 +51065,55 @@ var MovieCard = /*#__PURE__*/function (_React$Component) {
 
   var _super = _createSuper(MovieCard);
 
-  function MovieCard() {
+  function MovieCard(props) {
+    var _this;
+
     _classCallCheck(this, MovieCard);
 
-    return _super.apply(this, arguments);
+    _this = _super.call(this, props);
+    var addFavorite = false;
+
+    if (props.addFavorite) {
+      addFavorite = true;
+    }
+
+    var removeFavorite = false;
+
+    if (props.removeFavorite) {
+      removeFavorite = true;
+    }
+
+    _this.state = {
+      movie: _this.props.movie,
+      username: props.user,
+      userToken: props.userToken,
+      addFavorite: addFavorite,
+      removeFavorite: removeFavorite
+    };
+    return _this;
   }
 
   _createClass(MovieCard, [{
+    key: "addToFavorite",
+    value: function addToFavorite() {
+      this.setState({
+        addFavorite: false
+      });
+
+      _axios.default.post("https://primedome.herokuapp.com/users/".concat(this.state.username, "/Movies/").concat(this.state.movie._id), {
+        headers: {
+          Authorization: "Bearer ".concat(this.state.userToken)
+        }
+      }).then(function (response) {
+        console.log(response.data);
+        console.log('movie added');
+      }).catch(function (error) {
+        console.log(error);
+      });
+    }
+  }, {
     key: "render",
     value: function render() {
-      // This is given to the <MovieCard/> component by the outer world
-      // which, in this case, is `MainView`, as `MainView` is what’s
-      // connected to your database via the movies endpoint of your API
       var movie = this.props.movie;
       return _react.default.createElement(_reactBootstrap.Card, null, _react.default.createElement(_reactBootstrap.Card.Img, {
         variant: "top",
@@ -51084,14 +51127,16 @@ var MovieCard = /*#__PURE__*/function (_React$Component) {
       }, _react.default.createElement(_reactBootstrap.Button, {
         className: "more-button",
         variant: "primary"
-      }, "More")), _react.default.createElement(_reactBootstrap.Button, {
+      }, "More")), this.state.addFavorite && _react.default.createElement(_reactBootstrap.Button, {
         className: "favorite-button",
         variant: "secondary",
-        type: "submit"
-      }, "Add to Favorites!"), _react.default.createElement(_reactBootstrap.Button, {
+        type: "submit",
+        onClick: this.addToFavorite
+      }, "Add Favorite"), this.state.removeFavorite && _react.default.createElement(_reactBootstrap.Button, {
         className: "remove-button",
         variant: "outline-danger",
-        type: "submit"
+        type: "submit",
+        onClick: this.removeFromFavorite
       }, "Remove Favorite"))));
     }
   }]);
@@ -51118,7 +51163,7 @@ MovieCard.propTypes = {
     Featured: _propTypes.default.bool.isRequired
   }).isRequired
 };
-},{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","react-bootstrap":"../node_modules/react-bootstrap/esm/index.js","./movie-card.scss":"components/movie-card/movie-card.scss"}],"components/movie-view/movie-view.scss":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","axios":"../node_modules/axios/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","react-bootstrap":"../node_modules/react-bootstrap/esm/index.js","./movie-card.scss":"components/movie-card/movie-card.scss"}],"components/movie-view/movie-view.scss":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -51613,10 +51658,15 @@ function ProfileView(props) {
       birthday = _useState6[0],
       setBirthday = _useState6[1];
 
-  var _useState7 = (0, _react.useState)(false),
+  var _useState7 = (0, _react.useState)([]),
       _useState8 = _slicedToArray(_useState7, 2),
-      show = _useState8[0],
-      setShow = _useState8[1];
+      favoriteMovies = _useState8[0],
+      setFavoriteMovies = _useState8[1];
+
+  var _useState9 = (0, _react.useState)(false),
+      _useState10 = _slicedToArray(_useState9, 2),
+      show = _useState10[0],
+      setShow = _useState10[1];
 
   if (username === '') {
     _axios.default.get("https://primedome.herokuapp.com/users/".concat(props.user), {
@@ -51628,6 +51678,7 @@ function ProfileView(props) {
       setUsername(userData.Username);
       setEmail(userData.Email);
       setBirthday(new Date(userData.Birthday));
+      setFavoriteMovies(userData.FavoriteMovies);
       console.log(userData);
     }).catch(function (error) {
       console.log(error);
@@ -51840,7 +51891,7 @@ var MainView = /*#__PURE__*/function (_React$Component) {
         _this3.setState({
           user: userData.Username,
           userToken: userToken,
-          favoriteMovies: userData.favoriteMovies,
+          favoriteMovies: userData.FavoriteMovies,
           email: userData.Email,
           birthday: userData.Birthday
         });
@@ -51887,7 +51938,11 @@ var MainView = /*#__PURE__*/function (_React$Component) {
               xs: "auto",
               key: m._id
             }, _react.default.createElement(_movieCard.MovieCard, {
-              movie: m
+              user: user,
+              userToken: localStorage.getItem('token'),
+              key: m._id,
+              movie: m,
+              addFavorite: _this4.state.favoriteMovies.includes(m._id) ? false : true
             }));
           });
         }
@@ -51940,7 +51995,8 @@ var MainView = /*#__PURE__*/function (_React$Component) {
         render: function render() {
           return _react.default.createElement(_profileView.ProfileView, {
             user: user,
-            userToken: localStorage.getItem('token')
+            userToken: localStorage.getItem('token'),
+            movies: movies
           });
         }
       }))));
@@ -52045,7 +52101,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49619" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56720" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

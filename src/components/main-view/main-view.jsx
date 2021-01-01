@@ -78,7 +78,7 @@ export class MainView extends React.Component {
       this.setState({
         user: userData.Username,
         userToken: userToken,
-        favoriteMovies: userData.favoriteMovies,
+        favoriteMovies: userData.FavoriteMovies,
         email: userData.Email,
         birthday: userData.Birthday
       });
@@ -108,7 +108,13 @@ export class MainView extends React.Component {
               if (!user) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
               return movies.map((m) => 
               <Col xs="auto" key={m._id}>
-                <MovieCard movie={m} />
+                <MovieCard 
+                  user={user} 
+                  userToken={localStorage.getItem('token')} 
+                  key={m._id} 
+                  movie={m}
+                  addFavorite={this.state.favoriteMovies.includes(m._id) ? false : true} 
+                />
               </Col>
               )}
             }/>
@@ -125,7 +131,9 @@ export class MainView extends React.Component {
               return <DirectorView director={movies.find((m) => m.Director.Name === match.params.name).Director}
                 movies={movies.filter((m) => m.Director.Name === match.params.name)} />}
             }/>
-            <Route path="/profile" render={() => <ProfileView user={user} userToken={localStorage.getItem('token')} /> }/>
+            <Route path="/profile" render={() => 
+              <ProfileView user={user} userToken={localStorage.getItem('token')} movies={movies} /> 
+            }/>
           </Row>
         </Container>
       </Router>

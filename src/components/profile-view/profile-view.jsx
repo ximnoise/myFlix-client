@@ -12,6 +12,7 @@ export function ProfileView(props) {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [birthday, setBirthday] = useState(new Date());
+  const [favoriteMovies, setFavoriteMovies] = useState([]);
 
   const [show, setShow] = useState(false);
 
@@ -24,6 +25,7 @@ export function ProfileView(props) {
       setUsername(userData.Username);
       setEmail(userData.Email);
       setBirthday(new Date(userData.Birthday));
+      setFavoriteMovies(userData.FavoriteMovies);
       console.log(userData);
     })
     .catch((error) => {
