@@ -51556,7 +51556,148 @@ var NavView = /*#__PURE__*/function (_React$Component) {
 }(_react.default.Component);
 
 exports.NavView = NavView;
-},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","react-bootstrap":"../node_modules/react-bootstrap/esm/index.js","./nav-view.scss":"components/nav-view/nav-view.scss"}],"components/main-view/main-view.scss":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","react-bootstrap":"../node_modules/react-bootstrap/esm/index.js","./nav-view.scss":"components/nav-view/nav-view.scss"}],"components/profile-view/profile-view.scss":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"../../../../../.nvm/versions/node/v14.5.0/lib/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/profile-view/profile-view.jsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.ProfileView = ProfileView;
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _axios = _interopRequireDefault(require("axios"));
+
+var _reactRouterDom = require("react-router-dom");
+
+var _reactBootstrap = require("react-bootstrap");
+
+require("./profile-view.scss");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function ProfileView(props) {
+  var _useState = (0, _react.useState)(''),
+      _useState2 = _slicedToArray(_useState, 2),
+      username = _useState2[0],
+      setUsername = _useState2[1];
+
+  var _useState3 = (0, _react.useState)(''),
+      _useState4 = _slicedToArray(_useState3, 2),
+      email = _useState4[0],
+      setEmail = _useState4[1];
+
+  var _useState5 = (0, _react.useState)(new Date()),
+      _useState6 = _slicedToArray(_useState5, 2),
+      birthday = _useState6[0],
+      setBirthday = _useState6[1];
+
+  var _useState7 = (0, _react.useState)(false),
+      _useState8 = _slicedToArray(_useState7, 2),
+      show = _useState8[0],
+      setShow = _useState8[1];
+
+  if (username === '') {
+    _axios.default.get("https://primedome.herokuapp.com/users/".concat(props.user), {
+      headers: {
+        Authorization: "Bearer ".concat(props.userToken)
+      }
+    }).then(function (response) {
+      var userData = response.data;
+      setUsername(userData.Username);
+      setEmail(userData.Email);
+      setBirthday(new Date(userData.Birthday));
+      console.log(userData);
+    }).catch(function (error) {
+      console.log(error);
+    });
+  }
+
+  if (!username) return null;
+
+  function deregister() {
+    _axios.default.delete("https://primedome.herokuapp.com/users/".concat(props.user), {
+      headers: {
+        Authorization: "Bearer ".concat(props.userToken)
+      }
+    }).then(function (response) {
+      console.log(response);
+      localStorage.clear();
+      window.open('/', '_self');
+    }).catch(function (error) {
+      console.log(error);
+    });
+  }
+
+  ;
+
+  var handleClose = function handleClose() {
+    return setShow(false);
+  };
+
+  var handleShow = function handleShow() {
+    return setShow(true);
+  };
+
+  return _react.default.createElement("div", {
+    className: "profile-view"
+  }, _react.default.createElement(_reactBootstrap.Modal, {
+    show: show,
+    onHide: handleClose
+  }, _react.default.createElement(_reactBootstrap.Modal.Header, {
+    closeButton: true
+  }, _react.default.createElement(_reactBootstrap.Modal.Title, null, "Accept Changes")), _react.default.createElement(_reactBootstrap.Modal.Body, null, "Are you sure you want to delete your account?"), _react.default.createElement(_reactBootstrap.Modal.Footer, null, _react.default.createElement(_reactBootstrap.Button, {
+    variant: "secondary",
+    onClick: handleClose
+  }, "Close"), _react.default.createElement(_reactBootstrap.Button, {
+    variant: "danger",
+    onClick: deregister
+  }, "Delete Account"))), _react.default.createElement("div", {
+    className: "username"
+  }, _react.default.createElement("span", {
+    className: "label"
+  }, "Username: "), _react.default.createElement("span", {
+    className: "value"
+  }, username)), _react.default.createElement("div", {
+    className: "email"
+  }, _react.default.createElement("span", {
+    className: "label"
+  }, "Email: "), _react.default.createElement("span", {
+    className: "value"
+  }, email)), _react.default.createElement("div", {
+    className: "birthday"
+  }, _react.default.createElement("span", {
+    className: "label"
+  }, "Birthday: "), _react.default.createElement("span", {
+    className: "value"
+  }, birthday.getDate() + '/' + birthday.getMonth() + '/' + birthday.getFullYear())), _react.default.createElement(_reactBootstrap.Button, {
+    className: "deregister-button",
+    variant: "outline-danger",
+    onClick: handleShow
+  }, "Delete account"));
+}
+},{"react":"../node_modules/react/index.js","axios":"../node_modules/axios/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","react-bootstrap":"../node_modules/react-bootstrap/esm/index.js","./profile-view.scss":"components/profile-view/profile-view.scss"}],"components/main-view/main-view.scss":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -51588,6 +51729,8 @@ var _genreView = require("../genre-view/genre-view");
 var _directorView = require("../director-view/director-view");
 
 var _navView = require("../nav-view/nav-view");
+
+var _profileView = require("../profile-view/profile-view");
 
 var _reactBootstrap = require("react-bootstrap");
 
@@ -51642,13 +51785,27 @@ var MainView = /*#__PURE__*/function (_React$Component) {
     key: "componentDidMount",
     value: function componentDidMount() {
       var accessToken = localStorage.getItem('token');
+      var user = localStorage.getItem('user');
 
       if (accessToken !== null) {
         this.setState({
           user: localStorage.getItem('user')
         });
-        this.getMovies(accessToken);
+        this.getUserData(accessToken, user);
       }
+    } // When a user successfully logs in, this function updates
+    // the `user` property in state to that particular user
+
+  }, {
+    key: "onLoggedIn",
+    value: function onLoggedIn(authData) {
+      console.log(authData);
+      this.setState({
+        user: authData.user.Username
+      });
+      localStorage.setItem('token', authData.token);
+      localStorage.setItem('user', authData.user.Username);
+      this.getUserData(authData.token, authData.user.Username);
     }
   }, {
     key: "getMovies",
@@ -51667,26 +51824,38 @@ var MainView = /*#__PURE__*/function (_React$Component) {
       }).catch(function (error) {
         console.log(error);
       });
-    } // When a user successfully logs in, this function updates
-    // the `user` property in state to that particular user
-
+    }
   }, {
-    key: "onLoggedIn",
-    value: function onLoggedIn(authData) {
-      console.log(authData);
-      this.setState({
-        user: authData.user.Username
+    key: "getUserData",
+    value: function getUserData(userToken, user) {
+      var _this3 = this;
+
+      _axios.default.get("https://primedome.herokuapp.com/users/".concat(user), {
+        headers: {
+          Authorization: "Bearer ".concat(userToken)
+        }
+      }).then(function (response) {
+        var userData = response.data;
+
+        _this3.setState({
+          user: userData.Username,
+          userToken: userToken,
+          favoriteMovies: userData.favoriteMovies,
+          email: userData.Email,
+          birthday: userData.Birthday
+        });
+
+        _this3.getMovies(_this3.state.userToken);
+      }).catch(function (error) {
+        console.log(error);
       });
-      localStorage.setItem('token', authData.token);
-      localStorage.setItem('user', authData.user.Username);
-      this.getMovies(authData.token);
     } // This overrides the render() method of the superclass
     // No need to call super() though, as it does nothing by default
 
   }, {
     key: "render",
     value: function render() {
-      var _this3 = this;
+      var _this4 = this;
 
       // If the state isn't initialized, this will throw on runtime
       // before the data is initially loaded
@@ -51710,7 +51879,7 @@ var MainView = /*#__PURE__*/function (_React$Component) {
         render: function render() {
           if (!user) return _react.default.createElement(_loginView.LoginView, {
             onLoggedIn: function onLoggedIn(user) {
-              return _this3.onLoggedIn(user);
+              return _this4.onLoggedIn(user);
             }
           });
           return movies.map(function (m) {
@@ -51766,6 +51935,14 @@ var MainView = /*#__PURE__*/function (_React$Component) {
             })
           });
         }
+      }), _react.default.createElement(_reactRouterDom.Route, {
+        path: "/profile",
+        render: function render() {
+          return _react.default.createElement(_profileView.ProfileView, {
+            user: user,
+            userToken: localStorage.getItem('token')
+          });
+        }
       }))));
     }
   }]);
@@ -51774,7 +51951,7 @@ var MainView = /*#__PURE__*/function (_React$Component) {
 }(_react.default.Component);
 
 exports.MainView = MainView;
-},{"react":"../node_modules/react/index.js","axios":"../node_modules/axios/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","../login-view/login-view":"components/login-view/login-view.jsx","../registration-view/registration-view":"components/registration-view/registration-view.jsx","../movie-card/movie-card":"components/movie-card/movie-card.jsx","../movie-view/movie-view":"components/movie-view/movie-view.jsx","../genre-view/genre-view":"components/genre-view/genre-view.jsx","../director-view/director-view":"components/director-view/director-view.jsx","../nav-view/nav-view":"components/nav-view/nav-view.jsx","react-bootstrap":"../node_modules/react-bootstrap/esm/index.js","./main-view.scss":"components/main-view/main-view.scss"}],"index.scss":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","axios":"../node_modules/axios/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","../login-view/login-view":"components/login-view/login-view.jsx","../registration-view/registration-view":"components/registration-view/registration-view.jsx","../movie-card/movie-card":"components/movie-card/movie-card.jsx","../movie-view/movie-view":"components/movie-view/movie-view.jsx","../genre-view/genre-view":"components/genre-view/genre-view.jsx","../director-view/director-view":"components/director-view/director-view.jsx","../nav-view/nav-view":"components/nav-view/nav-view.jsx","../profile-view/profile-view":"components/profile-view/profile-view.jsx","react-bootstrap":"../node_modules/react-bootstrap/esm/index.js","./main-view.scss":"components/main-view/main-view.scss"}],"index.scss":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -51868,7 +52045,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59938" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49619" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

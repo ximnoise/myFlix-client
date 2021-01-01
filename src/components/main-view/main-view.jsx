@@ -10,12 +10,11 @@ import { MovieView } from '../movie-view/movie-view';
 import { GenreView } from '../genre-view/genre-view';
 import { DirectorView } from '../director-view/director-view';
 import { NavView } from '../nav-view/nav-view';
+import { ProfileView } from '../profile-view/profile-view';
 
 import { Container, Row, Col } from 'react-bootstrap';
 
 import './main-view.scss';
-
-
 
 
 export class MainView extends React.Component {
@@ -33,12 +32,26 @@ export class MainView extends React.Component {
 
   componentDidMount() {
     let accessToken = localStorage.getItem('token');
+    let user = localStorage.getItem('user');
     if (accessToken !== null) {
       this.setState({
         user: localStorage.getItem('user')
       });
-      this.getMovies(accessToken);
+      this.getUserData(accessToken, user);
     }
+  }
+
+  // When a user successfully logs in, this function updates
+  // the `user` property in state to that particular user
+  onLoggedIn(authData) {
+    console.log(authData);
+    this.setState({
+      user: authData.user.Username
+    });
+
+    localStorage.setItem('token', authData.token);
+    localStorage.setItem('user', authData.user.Username);
+    this.getUserData(authData.token, authData.user.Username);
   }
 
   getMovies(token) {
@@ -56,17 +69,24 @@ export class MainView extends React.Component {
     });
   }
 
-  // When a user successfully logs in, this function updates
-  // the `user` property in state to that particular user
-  onLoggedIn(authData) {
-    console.log(authData);
-    this.setState({
-      user: authData.user.Username
+  getUserData(userToken, user) {
+    axios.get(`https://primedome.herokuapp.com/users/${user}`, {
+      headers: { Authorization: `Bearer ${userToken}` }
+    })
+    .then((response) => {
+      let userData = response.data;
+      this.setState({
+        user: userData.Username,
+        userToken: userToken,
+        favoriteMovies: userData.favoriteMovies,
+        email: userData.Email,
+        birthday: userData.Birthday
+      });
+      this.getMovies(this.state.userToken);
+    })
+    .catch(function (error) {
+      console.log(error);
     });
-
-    localStorage.setItem('token', authData.token);
-    localStorage.setItem('user', authData.user.Username);
-    this.getMovies(authData.token);
   }
 
   // This overrides the render() method of the superclass
@@ -105,6 +125,7 @@ export class MainView extends React.Component {
               return <DirectorView director={movies.find((m) => m.Director.Name === match.params.name).Director}
                 movies={movies.filter((m) => m.Director.Name === match.params.name)} />}
             }/>
+            <Route path="/profile" render={() => <ProfileView user={user} userToken={localStorage.getItem('token')} /> }/>
           </Row>
         </Container>
       </Router>
