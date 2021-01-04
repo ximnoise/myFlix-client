@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
@@ -32,25 +32,44 @@ export class MovieCard extends React.Component {
     };
   }
 
-  addToFavorite() {
+  addFavorite = () => {
     this.setState({
-      addFavorite: false
+      addFavorite: false,
     });
-    axios.post(`https://primedome.herokuapp.com/users/${this.state.username}/Movies/${this.state.movie._id}`, {
-      headers: { Authorization: `Bearer ${this.state.userToken}` }
+    axios({
+      method: 'post',
+      url: `https://primedome.herokuapp.com/users/${this.state.username}/Movies/${this.state.movie._id}`,
+      headers: { Authorization: `Bearer ${this.state.userToken}` },
+      data: {},
     })
     .then((response) => {
-      console.log(response.data);
       console.log('movie added');
     })
-    .catch((error) => {
-      console.log(error);
+    .catch((e) => {
+      console.log(e);
+      console.log('movie not added');
     });
-  }
+  };
+
+  removeFavorite = () => {
+    this.props.updateFavorites(this.state.movie._id);
+    this.setState({
+      removeFavorite: false,
+    });
+    axios.delete(`https://primedome.herokuapp.com/users/${this.state.username}/Movies/${this.state.movie._id}`, {
+        headers: { Authorization: `Bearer ${this.state.userToken}` },
+    })
+    .then((response) => {
+      console.log('movie removed');
+    })
+    .catch((e) => {
+      console.log(e);
+      console.log('could not remove favorite');
+    });
+  };
 
   render() {
-
-    const { movie } = this.props
+    const { movie } = this.props;
 
     return (
       <Card>
@@ -67,7 +86,7 @@ export class MovieCard extends React.Component {
                 className="favorite-button" 
                 variant="secondary" 
                 type="submit" 
-                onClick={this.addToFavorite}
+                onClick={this.addFavorite}
               >
                 Add Favorite
               </Button>
@@ -77,7 +96,7 @@ export class MovieCard extends React.Component {
                 className="remove-button" 
                 variant="outline-danger" 
                 type="submit" 
-                onClick={this.removeFromFavorite}
+                onClick={this.removeFavorite}
               >
                 Remove Favorite
               </Button>
@@ -93,17 +112,12 @@ MovieCard.propTypes = {
   movie: PropTypes.shape({
     Title: PropTypes.string.isRequired,
     Description: PropTypes.string.isRequired,
-    ImagePath: PropTypes.string.isRequired,
     Genre: PropTypes.shape({
       Name: PropTypes.string.isRequired,
-      Description: PropTypes.string.isRequired
-    }),
+    }).isRequired,
     Director: PropTypes.shape({
       Name: PropTypes.string.isRequired,
-      Bio: PropTypes.string.isRequired,
-      Birth: PropTypes.string.isRequired,
-      Death: PropTypes.string
-    }),
-    Featured: PropTypes.bool.isRequired
-  }).isRequired
+    }).isRequired,
+    ImagePath: PropTypes.string.isRequired,
+  }).isRequired,
 };

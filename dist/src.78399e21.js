@@ -51020,7 +51020,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.MovieCard = void 0;
 
-var _react = _interopRequireWildcard(require("react"));
+var _react = _interopRequireDefault(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
@@ -51033,10 +51033,6 @@ var _reactBootstrap = require("react-bootstrap");
 require("./movie-card.scss");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -51071,6 +51067,46 @@ var MovieCard = /*#__PURE__*/function (_React$Component) {
     _classCallCheck(this, MovieCard);
 
     _this = _super.call(this, props);
+
+    _this.addFavorite = function () {
+      _this.setState({
+        addFavorite: false
+      });
+
+      (0, _axios.default)({
+        method: 'post',
+        url: "https://primedome.herokuapp.com/users/".concat(_this.state.username, "/Movies/").concat(_this.state.movie._id),
+        headers: {
+          Authorization: "Bearer ".concat(_this.state.userToken)
+        },
+        data: {}
+      }).then(function (response) {
+        console.log('movie added');
+      }).catch(function (e) {
+        console.log(e);
+        console.log('movie not added');
+      });
+    };
+
+    _this.removeFavorite = function () {
+      _this.props.updateFavorites(_this.state.movie._id);
+
+      _this.setState({
+        removeFavorite: false
+      });
+
+      _axios.default.delete("https://primedome.herokuapp.com/users/".concat(_this.state.username, "/Movies/").concat(_this.state.movie._id), {
+        headers: {
+          Authorization: "Bearer ".concat(_this.state.userToken)
+        }
+      }).then(function (response) {
+        console.log('movie removed');
+      }).catch(function (e) {
+        console.log(e);
+        console.log('could not remove favorite');
+      });
+    };
+
     var addFavorite = false;
 
     if (props.addFavorite) {
@@ -51094,24 +51130,6 @@ var MovieCard = /*#__PURE__*/function (_React$Component) {
   }
 
   _createClass(MovieCard, [{
-    key: "addToFavorite",
-    value: function addToFavorite() {
-      this.setState({
-        addFavorite: false
-      });
-
-      _axios.default.post("https://primedome.herokuapp.com/users/".concat(this.state.username, "/Movies/").concat(this.state.movie._id), {
-        headers: {
-          Authorization: "Bearer ".concat(this.state.userToken)
-        }
-      }).then(function (response) {
-        console.log(response.data);
-        console.log('movie added');
-      }).catch(function (error) {
-        console.log(error);
-      });
-    }
-  }, {
     key: "render",
     value: function render() {
       var movie = this.props.movie;
@@ -51131,12 +51149,12 @@ var MovieCard = /*#__PURE__*/function (_React$Component) {
         className: "favorite-button",
         variant: "secondary",
         type: "submit",
-        onClick: this.addToFavorite
+        onClick: this.addFavorite
       }, "Add Favorite"), this.state.removeFavorite && _react.default.createElement(_reactBootstrap.Button, {
         className: "remove-button",
         variant: "outline-danger",
         type: "submit",
-        onClick: this.removeFromFavorite
+        onClick: this.removeFavorite
       }, "Remove Favorite"))));
     }
   }]);
@@ -51149,18 +51167,13 @@ MovieCard.propTypes = {
   movie: _propTypes.default.shape({
     Title: _propTypes.default.string.isRequired,
     Description: _propTypes.default.string.isRequired,
-    ImagePath: _propTypes.default.string.isRequired,
     Genre: _propTypes.default.shape({
-      Name: _propTypes.default.string.isRequired,
-      Description: _propTypes.default.string.isRequired
-    }),
+      Name: _propTypes.default.string.isRequired
+    }).isRequired,
     Director: _propTypes.default.shape({
-      Name: _propTypes.default.string.isRequired,
-      Bio: _propTypes.default.string.isRequired,
-      Birth: _propTypes.default.string.isRequired,
-      Death: _propTypes.default.string
-    }),
-    Featured: _propTypes.default.bool.isRequired
+      Name: _propTypes.default.string.isRequired
+    }).isRequired,
+    ImagePath: _propTypes.default.string.isRequired
   }).isRequired
 };
 },{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","axios":"../node_modules/axios/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","react-bootstrap":"../node_modules/react-bootstrap/esm/index.js","./movie-card.scss":"components/movie-card/movie-card.scss"}],"components/movie-view/movie-view.scss":[function(require,module,exports) {
@@ -51620,6 +51633,8 @@ var _axios = _interopRequireDefault(require("axios"));
 
 var _reactRouterDom = require("react-router-dom");
 
+var _movieCard = require("../movie-card/movie-card");
+
 var _reactBootstrap = require("react-bootstrap");
 
 require("./profile-view.scss");
@@ -51679,7 +51694,6 @@ function ProfileView(props) {
       setEmail(userData.Email);
       setBirthday(new Date(userData.Birthday));
       setFavoriteMovies(userData.FavoriteMovies);
-      console.log(userData);
     }).catch(function (error) {
       console.log(error);
     });
@@ -51702,6 +51716,15 @@ function ProfileView(props) {
   }
 
   ;
+  var favorites = props.movies.filter(function (m) {
+    return favoriteMovies.includes(m._id);
+  });
+
+  var updateFavorites = function updateFavorites(movies) {
+    setFavoriteMovies(favoriteMovies.filter(function (favMovies) {
+      return favMovies !== movies;
+    }));
+  };
 
   var handleClose = function handleClose() {
     return setShow(false);
@@ -51746,9 +51769,27 @@ function ProfileView(props) {
     className: "deregister-button",
     variant: "outline-danger",
     onClick: handleShow
-  }, "Delete account"));
+  }, "Delete account"), _react.default.createElement("div", {
+    className: "favorite-movies-container"
+  }, _react.default.createElement("span", {
+    className: "label"
+  }, "Favorite Movies:"), _react.default.createElement(_reactBootstrap.Row, {
+    className: "favorite-movies"
+  }, favorites.map(function (m) {
+    return _react.default.createElement(_reactBootstrap.Col, {
+      xs: "auto",
+      key: m._id
+    }, _react.default.createElement(_movieCard.MovieCard, {
+      user: props.user,
+      userToken: props.userToken,
+      key: m._id,
+      movie: m,
+      removeFavorite: true,
+      updateFavorites: updateFavorites
+    }));
+  }))));
 }
-},{"react":"../node_modules/react/index.js","axios":"../node_modules/axios/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","react-bootstrap":"../node_modules/react-bootstrap/esm/index.js","./profile-view.scss":"components/profile-view/profile-view.scss"}],"components/main-view/main-view.scss":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","axios":"../node_modules/axios/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","../movie-card/movie-card":"components/movie-card/movie-card.jsx","react-bootstrap":"../node_modules/react-bootstrap/esm/index.js","./profile-view.scss":"components/profile-view/profile-view.scss"}],"components/main-view/main-view.scss":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -51939,7 +51980,7 @@ var MainView = /*#__PURE__*/function (_React$Component) {
               key: m._id
             }, _react.default.createElement(_movieCard.MovieCard, {
               user: user,
-              userToken: localStorage.getItem('token'),
+              userToken: _this4.state.userToken,
               key: m._id,
               movie: m,
               addFavorite: _this4.state.favoriteMovies.includes(m._id) ? false : true
@@ -52101,7 +52142,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56720" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56251" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -3,7 +3,9 @@ import axios from 'axios';
 
 import { Link } from 'react-router-dom';
 
-import { Button, Modal } from 'react-bootstrap';
+import { MovieCard } from '../movie-card/movie-card';
+
+import { Button, Modal, Col, Row } from 'react-bootstrap';
 
 import './profile-view.scss';
 
@@ -26,7 +28,6 @@ export function ProfileView(props) {
       setEmail(userData.Email);
       setBirthday(new Date(userData.Birthday));
       setFavoriteMovies(userData.FavoriteMovies);
-      console.log(userData);
     })
     .catch((error) => {
       console.log(error);
@@ -47,6 +48,16 @@ export function ProfileView(props) {
     .catch((error) => {
       console.log(error);
     });
+  };
+
+  let favorites = props.movies.filter((m) => favoriteMovies.includes(m._id));
+
+  const updateFavorites = (movies) => {
+    setFavoriteMovies(
+      favoriteMovies.filter((favMovies) => {
+        return favMovies !== movies;
+      })
+    );
   };
 
   const handleClose = () => setShow(false);
@@ -89,6 +100,23 @@ export function ProfileView(props) {
       <Button className="deregister-button" variant="outline-danger" onClick={handleShow}>
         Delete account
       </Button>
+      <div className="favorite-movies-container">
+        <span className="label">Favorite Movies:</span>
+        <Row className="favorite-movies">
+          {favorites.map((m) => (
+            <Col xs="auto" key={m._id}>
+              <MovieCard
+                user={props.user}
+                userToken={props.userToken}
+                key={m._id}
+                movie={m}
+                removeFavorite={true}
+                updateFavorites={updateFavorites}
+              />
+             </Col>
+          ))}
+        </Row>
+      </div>
     </div>
   );
 }

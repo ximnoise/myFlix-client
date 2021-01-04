@@ -108,6 +108,10 @@
   padding-left: 15px;
   padding-right: 15px;
 }
+
+.favorite-movies-container {
+  padding-top: 30px;
+}
 .container {
   padding-top: 30px;
 }

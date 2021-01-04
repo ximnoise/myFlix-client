@@ -110,7 +110,7 @@ export class MainView extends React.Component {
               <Col xs="auto" key={m._id}>
                 <MovieCard 
                   user={user} 
-                  userToken={localStorage.getItem('token')} 
+                  userToken={this.state.userToken} 
                   key={m._id} 
                   movie={m}
                   addFavorite={this.state.favoriteMovies.includes(m._id) ? false : true} 
