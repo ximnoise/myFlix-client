@@ -120,7 +120,12 @@ export class MainView extends React.Component {
             }/>
             <Route path="/register" render={() => <RegistrationView /> }/>
             <Route path="/movies/:movieId" render={({match}) => 
-              <MovieView movie={movies.find((m)=> m._id === match.params.movieId)} />
+              <MovieView 
+                movie={movies.find((m)=> m._id === match.params.movieId)}
+                user={user}
+                userToken={this.state.userToken}
+                addFavorite={this.state.favoriteMovies.includes(match.params.movieId) ? false : true} 
+              />
             }/>
             <Route path="/genres/:name" render={({match}) => 
               <GenreView genre={movies.find((m) => m.Genre.Name === match.params.name).Genre}
@@ -132,7 +137,11 @@ export class MainView extends React.Component {
                 movies={movies.filter((m) => m.Director.Name === match.params.name)} />}
             }/>
             <Route path="/profile" render={() => 
-              <ProfileView user={user} userToken={localStorage.getItem('token')} movies={movies} /> 
+              <ProfileView 
+                user={user} 
+                userToken={this.state.userToken} 
+                movies={movies} 
+              /> 
             }/>
           </Row>
         </Container>

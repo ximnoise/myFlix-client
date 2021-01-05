@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 import { MovieCard } from '../movie-card/movie-card';
+import { ProfileEditView } from '../profile-edit-view/profile-edit-view';
 
 import { Button, Modal, Col, Row } from 'react-bootstrap';
 
@@ -15,7 +16,7 @@ export function ProfileView(props) {
   const [email, setEmail] = useState('');
   const [birthday, setBirthday] = useState(new Date());
   const [favoriteMovies, setFavoriteMovies] = useState([]);
-
+  const [edit, setEdit] = useState(false);
   const [show, setShow] = useState(false);
 
   if (username === '') {
@@ -60,6 +61,10 @@ export function ProfileView(props) {
     );
   };
 
+  const editUser = () => {
+    setEdit(!edit);
+  }
+
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -93,13 +98,17 @@ export function ProfileView(props) {
         <span className="label">Birthday: </span>
         <span className="value">
           {birthday.getDate() + '/' +
-            birthday.getMonth() + '/' +
+            birthday.getUTCMonth() + '/' +
             birthday.getFullYear()}
-          </span>
+        </span>
       </div>
+      <Button className="edit-button" variant="primary" onClick={editUser}>
+        Edit
+      </Button>
       <Button className="deregister-button" variant="outline-danger" onClick={handleShow}>
         Delete account
       </Button>
+      {edit && <ProfileEditView user={props.user} userToken={props.userToken} />}
       <div className="favorite-movies-container">
         <span className="label">Favorite Movies:</span>
         <Row className="favorite-movies">

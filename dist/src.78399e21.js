@@ -50956,7 +50956,7 @@ function RegistrationView(props) {
       // open in the current tab
 
       window.open('/', '_self');
-    }).catch(function (e) {
+    }).catch(function (error) {
       console.log('error registering the user');
     });
   };
@@ -51191,6 +51191,8 @@ exports.MovieView = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
+var _axios = _interopRequireDefault(require("axios"));
+
 var _reactRouterDom = require("react-router-dom");
 
 var _reactBootstrap = require("react-bootstrap");
@@ -51226,13 +51228,45 @@ var MovieView = /*#__PURE__*/function (_React$Component) {
 
   var _super = _createSuper(MovieView);
 
-  function MovieView() {
+  function MovieView(props) {
     var _this;
 
     _classCallCheck(this, MovieView);
 
-    _this = _super.call(this);
-    _this.state = {};
+    _this = _super.call(this, props);
+
+    _this.addFavorite = function () {
+      _this.setState({
+        addFavorite: false
+      });
+
+      (0, _axios.default)({
+        method: 'post',
+        url: "https://primedome.herokuapp.com/users/".concat(_this.state.username, "/Movies/").concat(_this.state.movie._id),
+        headers: {
+          Authorization: "Bearer ".concat(_this.state.userToken)
+        },
+        data: {}
+      }).then(function (response) {
+        console.log('movie added');
+      }).catch(function (e) {
+        console.log(e);
+        console.log('movie not added');
+      });
+    };
+
+    var addFavorite = false;
+
+    if (props.addFavorite) {
+      addFavorite = true;
+    }
+
+    _this.state = {
+      movie: _this.props.movie,
+      username: _this.props.user,
+      userToken: _this.props.userToken,
+      addFavorite: addFavorite
+    };
     return _this;
   }
 
@@ -51278,10 +51312,11 @@ var MovieView = /*#__PURE__*/function (_React$Component) {
         to: '/'
       }, _react.default.createElement(_reactBootstrap.Button, {
         variant: "outline-danger"
-      }, "Back")), _react.default.createElement(_reactBootstrap.Button, {
-        variant: "primary",
-        type: "submit"
-      }, "Add to Favorites!"));
+      }, "Back")), this.state.addFavorite && _react.default.createElement(_reactBootstrap.Button, {
+        variant: "secondary",
+        type: "submit",
+        onClick: this.addFavorite
+      }, "Add Favorite"));
     }
   }]);
 
@@ -51289,7 +51324,7 @@ var MovieView = /*#__PURE__*/function (_React$Component) {
 }(_react.default.Component);
 
 exports.MovieView = MovieView;
-},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","react-bootstrap":"../node_modules/react-bootstrap/esm/index.js","./movie-view.scss":"components/movie-view/movie-view.scss"}],"components/genre-view/genre-view.scss":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","axios":"../node_modules/axios/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","react-bootstrap":"../node_modules/react-bootstrap/esm/index.js","./movie-view.scss":"components/movie-view/movie-view.scss"}],"components/genre-view/genre-view.scss":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -51614,7 +51649,134 @@ var NavView = /*#__PURE__*/function (_React$Component) {
 }(_react.default.Component);
 
 exports.NavView = NavView;
-},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","react-bootstrap":"../node_modules/react-bootstrap/esm/index.js","./nav-view.scss":"components/nav-view/nav-view.scss"}],"components/profile-view/profile-view.scss":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","react-bootstrap":"../node_modules/react-bootstrap/esm/index.js","./nav-view.scss":"components/nav-view/nav-view.scss"}],"components/profile-edit-view/profile-edit-view.scss":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"../../../../../.nvm/versions/node/v14.5.0/lib/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/profile-edit-view/profile-edit-view.jsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.ProfileEditView = ProfileEditView;
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _axios = _interopRequireDefault(require("axios"));
+
+var _reactBootstrap = require("react-bootstrap");
+
+require("./profile-edit-view.scss");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function ProfileEditView(props) {
+  var _useState = (0, _react.useState)(''),
+      _useState2 = _slicedToArray(_useState, 2),
+      username = _useState2[0],
+      setUsername = _useState2[1];
+
+  var _useState3 = (0, _react.useState)(''),
+      _useState4 = _slicedToArray(_useState3, 2),
+      password = _useState4[0],
+      setPassword = _useState4[1];
+
+  var _useState5 = (0, _react.useState)(''),
+      _useState6 = _slicedToArray(_useState5, 2),
+      email = _useState6[0],
+      setEmail = _useState6[1];
+
+  var _useState7 = (0, _react.useState)(''),
+      _useState8 = _slicedToArray(_useState7, 2),
+      birthday = _useState8[0],
+      setBirthday = _useState8[1];
+
+  var handleSubmit = function handleSubmit(e) {
+    e.preventDefault();
+
+    _axios.default.put("https://primedome.herokuapp.com/users/".concat(props.user), {
+      Username: username,
+      Password: password,
+      Email: email,
+      Birthday: birthday
+    }, {
+      headers: {
+        Authorization: "Bearer ".concat(props.userToken)
+      }
+    }).then(function (response) {
+      console.log(response);
+      localStorage.clear();
+      window.open('/', '_self');
+    }).catch(function (error) {
+      console.log(error);
+    });
+  };
+
+  return _react.default.createElement(_reactBootstrap.Container, null, _react.default.createElement(_reactBootstrap.Form, {
+    className: "profile-edit-form"
+  }, _react.default.createElement(_reactBootstrap.Form.Group, {
+    controlId: "formBasicUsername"
+  }, _react.default.createElement(_reactBootstrap.Form.Label, null, "New Username"), _react.default.createElement(_reactBootstrap.Form.Control, {
+    type: "text",
+    placeholder: "Enter username",
+    value: username,
+    onChange: function onChange(e) {
+      return setUsername(e.target.value);
+    }
+  })), _react.default.createElement(_reactBootstrap.Form.Group, {
+    controlId: "formBasicEmail"
+  }, _react.default.createElement(_reactBootstrap.Form.Label, null, "New Email"), _react.default.createElement(_reactBootstrap.Form.Control, {
+    type: "email",
+    placeholder: "Enter email",
+    value: email,
+    onChange: function onChange(e) {
+      return setEmail(e.target.value);
+    }
+  }), _react.default.createElement(_reactBootstrap.Form.Text, {
+    className: "text-muted"
+  }, "We'll never share your email with anyone else.")), _react.default.createElement(_reactBootstrap.Form.Group, {
+    controlId: "formBasicBirthday"
+  }, _react.default.createElement(_reactBootstrap.Form.Label, null, "Birthday"), _react.default.createElement(_reactBootstrap.Form.Control, {
+    type: "date",
+    placeholder: "MM/DD/YYYY",
+    value: birthday,
+    onChange: function onChange(e) {
+      return setBirthday(e.target.value);
+    }
+  })), _react.default.createElement(_reactBootstrap.Form.Group, {
+    controlId: "formBasicPassword"
+  }, _react.default.createElement(_reactBootstrap.Form.Label, null, "New Password"), _react.default.createElement(_reactBootstrap.Form.Control, {
+    type: "password",
+    placeholder: "Password",
+    value: password,
+    onChange: function onChange(e) {
+      return setPassword(e.target.value);
+    }
+  })), _react.default.createElement(_reactBootstrap.Button, {
+    variant: "primary",
+    type: "submit",
+    onClick: handleSubmit
+  }, "Apply")));
+}
+},{"react":"../node_modules/react/index.js","axios":"../node_modules/axios/index.js","react-bootstrap":"../node_modules/react-bootstrap/esm/index.js","./profile-edit-view.scss":"components/profile-edit-view/profile-edit-view.scss"}],"components/profile-view/profile-view.scss":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -51634,6 +51796,8 @@ var _axios = _interopRequireDefault(require("axios"));
 var _reactRouterDom = require("react-router-dom");
 
 var _movieCard = require("../movie-card/movie-card");
+
+var _profileEditView = require("../profile-edit-view/profile-edit-view");
 
 var _reactBootstrap = require("react-bootstrap");
 
@@ -51680,8 +51844,13 @@ function ProfileView(props) {
 
   var _useState9 = (0, _react.useState)(false),
       _useState10 = _slicedToArray(_useState9, 2),
-      show = _useState10[0],
-      setShow = _useState10[1];
+      edit = _useState10[0],
+      setEdit = _useState10[1];
+
+  var _useState11 = (0, _react.useState)(false),
+      _useState12 = _slicedToArray(_useState11, 2),
+      show = _useState12[0],
+      setShow = _useState12[1];
 
   if (username === '') {
     _axios.default.get("https://primedome.herokuapp.com/users/".concat(props.user), {
@@ -51726,6 +51895,10 @@ function ProfileView(props) {
     }));
   };
 
+  var editUser = function editUser() {
+    setEdit(!edit);
+  };
+
   var handleClose = function handleClose() {
     return setShow(false);
   };
@@ -51765,11 +51938,18 @@ function ProfileView(props) {
     className: "label"
   }, "Birthday: "), _react.default.createElement("span", {
     className: "value"
-  }, birthday.getDate() + '/' + birthday.getMonth() + '/' + birthday.getFullYear())), _react.default.createElement(_reactBootstrap.Button, {
+  }, birthday.getDate() + '/' + birthday.getUTCMonth() + '/' + birthday.getFullYear())), _react.default.createElement(_reactBootstrap.Button, {
+    className: "edit-button",
+    variant: "primary",
+    onClick: editUser
+  }, "Edit"), _react.default.createElement(_reactBootstrap.Button, {
     className: "deregister-button",
     variant: "outline-danger",
     onClick: handleShow
-  }, "Delete account"), _react.default.createElement("div", {
+  }, "Delete account"), edit && _react.default.createElement(_profileEditView.ProfileEditView, {
+    user: props.user,
+    userToken: props.userToken
+  }), _react.default.createElement("div", {
     className: "favorite-movies-container"
   }, _react.default.createElement("span", {
     className: "label"
@@ -51789,7 +51969,7 @@ function ProfileView(props) {
     }));
   }))));
 }
-},{"react":"../node_modules/react/index.js","axios":"../node_modules/axios/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","../movie-card/movie-card":"components/movie-card/movie-card.jsx","react-bootstrap":"../node_modules/react-bootstrap/esm/index.js","./profile-view.scss":"components/profile-view/profile-view.scss"}],"components/main-view/main-view.scss":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","axios":"../node_modules/axios/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","../movie-card/movie-card":"components/movie-card/movie-card.jsx","../profile-edit-view/profile-edit-view":"components/profile-edit-view/profile-edit-view.jsx","react-bootstrap":"../node_modules/react-bootstrap/esm/index.js","./profile-view.scss":"components/profile-view/profile-view.scss"}],"components/main-view/main-view.scss":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -51999,7 +52179,10 @@ var MainView = /*#__PURE__*/function (_React$Component) {
           return _react.default.createElement(_movieView.MovieView, {
             movie: movies.find(function (m) {
               return m._id === match.params.movieId;
-            })
+            }),
+            user: user,
+            userToken: _this4.state.userToken,
+            addFavorite: _this4.state.favoriteMovies.includes(match.params.movieId) ? false : true
           });
         }
       }), _react.default.createElement(_reactRouterDom.Route, {
@@ -52036,7 +52219,7 @@ var MainView = /*#__PURE__*/function (_React$Component) {
         render: function render() {
           return _react.default.createElement(_profileView.ProfileView, {
             user: user,
-            userToken: localStorage.getItem('token'),
+            userToken: _this4.state.userToken,
             movies: movies
           });
         }
@@ -52142,7 +52325,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56251" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49810" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -42,8 +42,8 @@ export class NavView extends React.Component {
               className="logout-button" 
               variant="outline-danger" 
               onClick={this.loggedOut}
-              >
-                Log Out
+            >
+              Log Out
             </Button>
           </Nav>
         </Navbar.Collapse>

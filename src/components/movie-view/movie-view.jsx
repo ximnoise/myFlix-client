@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 
 import { Link } from 'react-router-dom';
 
@@ -8,11 +9,40 @@ import './movie-view.scss';
 
 
 export class MovieView extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
-    this.state = {};
+    let addFavorite = false;
+    if (props.addFavorite) {
+      addFavorite = true;
+    }
+
+    this.state = {
+      movie: this.props.movie,
+      username: this.props.user,
+      userToken: this.props.userToken,
+      addFavorite: addFavorite
+    };
   }
+
+  addFavorite = () => {
+    this.setState({
+      addFavorite: false
+    });
+    axios({
+      method: 'post',
+      url: `https://primedome.herokuapp.com/users/${this.state.username}/Movies/${this.state.movie._id}`,
+      headers: { Authorization: `Bearer ${this.state.userToken}` },
+      data: {},
+    })
+    .then((response) => {
+      console.log('movie added');
+    })
+    .catch((e) => {
+      console.log(e);
+      console.log('movie not added');
+    });
+  };
 
   render() {
     const { movie } = this.props;
@@ -48,9 +78,15 @@ export class MovieView extends React.Component {
         <Link to={'/'}>
           <Button variant="outline-danger">Back</Button>
         </Link>
-        <Button variant="primary" type="submit">
-          Add to Favorites!
-        </Button>
+        {this.state.addFavorite && (
+          <Button 
+            variant="secondary" 
+            type="submit" 
+            onClick={this.addFavorite}
+          >
+            Add Favorite
+          </Button>
+        )}
       </div>
     );
   }
