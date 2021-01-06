@@ -1,22 +1,44 @@
+.welcome-area {
+  text-align: center;
+}
+
+.login-toggle {
+  margin-right: 5px;
+}
+
+.register-link {
+  margin-left: 5px;
+}
+
 .login-form {
-  height: 100vh;
-  width: 100%;
-  padding: 0px 10px;
+  width: 75%;
+  padding-top: 100px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: auto;
   align-content: center;
 }
+
+.login-button {
+  margin: 0 auto;
+}
+.top-area {
+  text-align: center;
+}
+
 .registration-form {
-  height: 100vh;
-  width: 100%;
-  padding: 0px 10px;
+  width: 75%;
+  padding-top: 100px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: auto;
   align-content: center;
+}
+
+.register-button {
+  margin: 0 auto;
 }
 .card {
   width: 18rem;
@@ -103,6 +125,7 @@
   margin-bottom: 20px;
 }
 .profile-view {
+  margin: 0 auto;
   position: static;
   text-align: center;
   padding-left: 15px;

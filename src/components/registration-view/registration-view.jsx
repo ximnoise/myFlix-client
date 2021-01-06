@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
+import { Link } from 'react-router-dom';
+
 import { Form, Button, Container }  from 'react-bootstrap';
 
 import './registration-view.scss';
@@ -34,6 +36,11 @@ export function RegistrationView(props) {
 
   return (
     <Container>
+      <div className="top-area">
+        <Link to={'/'}>
+          <Button className="back-button" variant="outline-danger">Back</Button>
+        </Link>
+      </div>
       <Form className="registration-form">
         <Form.Group controlId="formBasicUsername">
           <Form.Label>Username</Form.Label>
@@ -74,7 +81,12 @@ export function RegistrationView(props) {
             onChange={(e) => setPassword(e.target.value)}
           />
         </Form.Group>
-        <Button variant="primary" type="submit" onClick={handleSubmit}>
+        <Button 
+          className="register-button" 
+          variant="primary" 
+          type="submit" 
+          onClick={handleSubmit}
+        >
           Register
         </Button>
       </Form>

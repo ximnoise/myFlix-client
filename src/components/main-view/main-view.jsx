@@ -44,7 +44,6 @@ export class MainView extends React.Component {
   // When a user successfully logs in, this function updates
   // the `user` property in state to that particular user
   onLoggedIn(authData) {
-    console.log(authData);
     this.setState({
       user: authData.user.Username
     });
@@ -128,13 +127,17 @@ export class MainView extends React.Component {
               />
             }/>
             <Route path="/genres/:name" render={({match}) => 
-              <GenreView genre={movies.find((m) => m.Genre.Name === match.params.name).Genre}
-                movies={movies.filter((m) => m.Genre.Name === match.params.name)} />
+              <GenreView 
+                genre={movies.find((m) => m.Genre.Name === match.params.name).Genre}
+                movies={movies.filter((m) => m.Genre.Name === match.params.name)} 
+              />
             }/>
             <Route path="/directors/:name" render={({ match }) => {
               if (!movies) return <div className="main-view"/>;
-              return <DirectorView director={movies.find((m) => m.Director.Name === match.params.name).Director}
-                movies={movies.filter((m) => m.Director.Name === match.params.name)} />}
+              return <DirectorView 
+                director={movies.find((m) => m.Director.Name === match.params.name).Director}
+                movies={movies.filter((m) => m.Director.Name === match.params.name)} 
+              />}
             }/>
             <Route path="/profile" render={() => 
               <ProfileView 

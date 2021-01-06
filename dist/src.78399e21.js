@@ -50805,6 +50805,8 @@ var _propTypes = _interopRequireDefault(require("prop-types"));
 
 var _axios = _interopRequireDefault(require("axios"));
 
+var _reactRouterDom = require("react-router-dom");
+
 var _reactBootstrap = require("react-bootstrap");
 
 require("./login-view.scss");
@@ -50838,6 +50840,11 @@ function LoginView(props) {
       password = _useState4[0],
       setPassword = _useState4[1];
 
+  var _useState5 = (0, _react.useState)(false),
+      _useState6 = _slicedToArray(_useState5, 2),
+      login = _useState6[0],
+      setLogin = _useState6[1];
+
   var handleSubmit = function handleSubmit(e) {
     e.preventDefault(); // Send a request to the server for authentication
 
@@ -50852,7 +50859,22 @@ function LoginView(props) {
     });
   };
 
-  return _react.default.createElement(_reactBootstrap.Container, null, _react.default.createElement(_reactBootstrap.Form, {
+  var loginUser = function loginUser() {
+    setLogin(!login);
+  };
+
+  return _react.default.createElement(_reactBootstrap.Container, null, _react.default.createElement("div", {
+    className: "welcome-area"
+  }, _react.default.createElement("h2", null, "Welcome to PrimeDome"), _react.default.createElement(_reactBootstrap.Button, {
+    className: "login-toggle",
+    variant: "primary",
+    onClick: loginUser
+  }, "Login"), _react.default.createElement(_reactRouterDom.Link, {
+    to: '/register'
+  }, _react.default.createElement(_reactBootstrap.Button, {
+    className: "register-link",
+    variant: "secondary"
+  }, "Register"))), login && _react.default.createElement(_reactBootstrap.Form, {
     className: "login-form"
   }, _react.default.createElement(_reactBootstrap.Form.Group, {
     controlId: "formBasicUsername"
@@ -50873,6 +50895,7 @@ function LoginView(props) {
       return setPassword(e.target.value);
     }
   })), _react.default.createElement(_reactBootstrap.Button, {
+    className: "login-button",
     variant: "primary",
     type: "submit",
     onClick: handleSubmit
@@ -50882,7 +50905,7 @@ function LoginView(props) {
 LoginView.propTypes = {
   onLoggedIn: _propTypes.default.func.isRequired
 };
-},{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","axios":"../node_modules/axios/index.js","react-bootstrap":"../node_modules/react-bootstrap/esm/index.js","./login-view.scss":"components/login-view/login-view.scss"}],"components/registration-view/registration-view.scss":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","axios":"../node_modules/axios/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","react-bootstrap":"../node_modules/react-bootstrap/esm/index.js","./login-view.scss":"components/login-view/login-view.scss"}],"components/registration-view/registration-view.scss":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -50898,6 +50921,8 @@ exports.RegistrationView = RegistrationView;
 var _react = _interopRequireWildcard(require("react"));
 
 var _axios = _interopRequireDefault(require("axios"));
+
+var _reactRouterDom = require("react-router-dom");
 
 var _reactBootstrap = require("react-bootstrap");
 
@@ -50961,7 +50986,14 @@ function RegistrationView(props) {
     });
   };
 
-  return _react.default.createElement(_reactBootstrap.Container, null, _react.default.createElement(_reactBootstrap.Form, {
+  return _react.default.createElement(_reactBootstrap.Container, null, _react.default.createElement("div", {
+    className: "top-area"
+  }, _react.default.createElement(_reactRouterDom.Link, {
+    to: '/'
+  }, _react.default.createElement(_reactBootstrap.Button, {
+    className: "back-button",
+    variant: "outline-danger"
+  }, "Back"))), _react.default.createElement(_reactBootstrap.Form, {
     className: "registration-form"
   }, _react.default.createElement(_reactBootstrap.Form.Group, {
     controlId: "formBasicUsername"
@@ -51002,12 +51034,13 @@ function RegistrationView(props) {
       return setPassword(e.target.value);
     }
   })), _react.default.createElement(_reactBootstrap.Button, {
+    className: "register-button",
     variant: "primary",
     type: "submit",
     onClick: handleSubmit
   }, "Register")));
 }
-},{"react":"../node_modules/react/index.js","axios":"../node_modules/axios/index.js","react-bootstrap":"../node_modules/react-bootstrap/esm/index.js","./registration-view.scss":"components/registration-view/registration-view.scss"}],"components/movie-card/movie-card.scss":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","axios":"../node_modules/axios/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","react-bootstrap":"../node_modules/react-bootstrap/esm/index.js","./registration-view.scss":"components/registration-view/registration-view.scss"}],"components/movie-card/movie-card.scss":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -51538,12 +51571,6 @@ var DirectorView = /*#__PURE__*/function (_React$Component) {
 
   return DirectorView;
 }(_react.default.Component);
-/*
-          {movies.map((m) => (
-            <div className="movie" key={m._id}>{m.title}</div>
-          ))}
-*/
-
 
 exports.DirectorView = DirectorView;
 },{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","react-bootstrap":"../node_modules/react-bootstrap/esm/index.js","./director-view.scss":"components/director-view/director-view.scss"}],"components/nav-view/nav-view.scss":[function(require,module,exports) {
@@ -51636,12 +51663,15 @@ var NavView = /*#__PURE__*/function (_React$Component) {
       }, "Features")), _react.default.createElement(_reactBootstrap.Nav, null, _react.default.createElement(_reactRouterDom.Link, {
         to: '/profile'
       }, _react.default.createElement(_reactBootstrap.Button, {
+        className: "profile-button",
         variant: "primary"
-      }, "Profile"))), _react.default.createElement(_reactBootstrap.Nav, null, _react.default.createElement(_reactBootstrap.Button, {
+      }, "Profile"))), _react.default.createElement(_reactBootstrap.Nav, null, _react.default.createElement(_reactRouterDom.Link, {
+        to: '/'
+      }, _react.default.createElement(_reactBootstrap.Button, {
         className: "logout-button",
         variant: "outline-danger",
         onClick: this.loggedOut
-      }, "Log Out"))));
+      }, "Log Out")))));
     }
   }]);
 
@@ -51793,8 +51823,6 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _axios = _interopRequireDefault(require("axios"));
 
-var _reactRouterDom = require("react-router-dom");
-
 var _movieCard = require("../movie-card/movie-card");
 
 var _profileEditView = require("../profile-edit-view/profile-edit-view");
@@ -51938,7 +51966,7 @@ function ProfileView(props) {
     className: "label"
   }, "Birthday: "), _react.default.createElement("span", {
     className: "value"
-  }, birthday.getDate() + '/' + birthday.getUTCMonth() + '/' + birthday.getFullYear())), _react.default.createElement(_reactBootstrap.Button, {
+  }, birthday.toDateString())), _react.default.createElement(_reactBootstrap.Button, {
     className: "edit-button",
     variant: "primary",
     onClick: editUser
@@ -51969,7 +51997,7 @@ function ProfileView(props) {
     }));
   }))));
 }
-},{"react":"../node_modules/react/index.js","axios":"../node_modules/axios/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","../movie-card/movie-card":"components/movie-card/movie-card.jsx","../profile-edit-view/profile-edit-view":"components/profile-edit-view/profile-edit-view.jsx","react-bootstrap":"../node_modules/react-bootstrap/esm/index.js","./profile-view.scss":"components/profile-view/profile-view.scss"}],"components/main-view/main-view.scss":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","axios":"../node_modules/axios/index.js","../movie-card/movie-card":"components/movie-card/movie-card.jsx","../profile-edit-view/profile-edit-view":"components/profile-edit-view/profile-edit-view.jsx","react-bootstrap":"../node_modules/react-bootstrap/esm/index.js","./profile-view.scss":"components/profile-view/profile-view.scss"}],"components/main-view/main-view.scss":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -52071,7 +52099,6 @@ var MainView = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "onLoggedIn",
     value: function onLoggedIn(authData) {
-      console.log(authData);
       this.setState({
         user: authData.user.Username
       });
@@ -52325,7 +52352,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49810" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60467" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

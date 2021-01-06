@@ -34,17 +34,24 @@ export class NavView extends React.Component {
           </Nav>
           <Nav>
             <Link to={'/profile'}>
-              <Button variant="primary">Profile</Button>
+              <Button 
+                className="profile-button" 
+                variant="primary"
+              >
+                Profile
+              </Button>
             </Link>
           </Nav>
           <Nav>
-            <Button 
-              className="logout-button" 
-              variant="outline-danger" 
-              onClick={this.loggedOut}
-            >
-              Log Out
-            </Button>
+            <Link to={'/'}>
+              <Button 
+                className="logout-button" 
+                variant="outline-danger" 
+                onClick={this.loggedOut}
+              >
+                Log Out
+              </Button>
+            </Link>
           </Nav>
         </Navbar.Collapse>
       </Navbar>

@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-import { Link } from 'react-router-dom';
-
 import { MovieCard } from '../movie-card/movie-card';
 import { ProfileEditView } from '../profile-edit-view/profile-edit-view';
 
@@ -12,12 +10,12 @@ import './profile-view.scss';
 
 
 export function ProfileView(props) {
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [birthday, setBirthday] = useState(new Date());
-  const [favoriteMovies, setFavoriteMovies] = useState([]);
-  const [edit, setEdit] = useState(false);
-  const [show, setShow] = useState(false);
+  const [ username, setUsername ] = useState('');
+  const [ email, setEmail ] = useState('');
+  const [ birthday, setBirthday ] = useState(new Date());
+  const [ favoriteMovies, setFavoriteMovies ] = useState([]);
+  const [ edit, setEdit ] = useState(false);
+  const [ show, setShow ] = useState(false);
 
   if (username === '') {
     axios.get(`https://primedome.herokuapp.com/users/${props.user}`, {
@@ -96,16 +94,20 @@ export function ProfileView(props) {
       </div>
       <div className="birthday">
         <span className="label">Birthday: </span>
-        <span className="value">
-          {birthday.getDate() + '/' +
-            birthday.getUTCMonth() + '/' +
-            birthday.getFullYear()}
-        </span>
+        <span className="value">{birthday.toDateString()}</span>
       </div>
-      <Button className="edit-button" variant="primary" onClick={editUser}>
+      <Button 
+        className="edit-button" 
+        variant="primary" 
+        onClick={editUser}
+      >
         Edit
       </Button>
-      <Button className="deregister-button" variant="outline-danger" onClick={handleShow}>
+      <Button 
+        className="deregister-button" 
+        variant="outline-danger" 
+        onClick={handleShow}
+      >
         Delete account
       </Button>
       {edit && <ProfileEditView user={props.user} userToken={props.userToken} />}

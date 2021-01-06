@@ -79,7 +79,12 @@ export class MovieCard extends React.Component {
           <Card.Text>{movie.Description}</Card.Text>
           <div className="button-wrapper">
             <Link to={`/movies/${movie._id}`}>
-              <Button className="more-button" variant="primary">More</Button>
+              <Button 
+                className="more-button" 
+                variant="primary"
+              >
+                More
+              </Button>
             </Link>
             {this.state.addFavorite && (
               <Button 

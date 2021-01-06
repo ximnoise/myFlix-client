@@ -54,9 +54,3 @@ export class DirectorView extends React.Component {
     );
   }
 }
-
-/*
-          {movies.map((m) => (
-            <div className="movie" key={m._id}>{m.title}</div>
-          ))}
-*/

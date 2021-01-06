@@ -75,7 +75,11 @@ export function ProfileEditView(props) {
             onChange={(e) => setPassword(e.target.value)}
           />
         </Form.Group>
-        <Button variant="primary" type="submit" onClick={handleSubmit}>
+        <Button 
+          variant="primary" 
+          type="submit" 
+          onClick={handleSubmit}
+        >
           Apply
         </Button>
       </Form>
