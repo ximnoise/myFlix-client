@@ -1,4 +1,7 @@
 import React from 'react';
+import axios from 'axios';
+
+import { Link } from 'react-router-dom';
 
 import { Button } from 'react-bootstrap';
 
@@ -6,14 +9,43 @@ import './movie-view.scss';
 
 
 export class MovieView extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
-    this.state = {};
+    let addFavorite = false;
+    if (props.addFavorite) {
+      addFavorite = true;
+    }
+
+    this.state = {
+      movie: this.props.movie,
+      username: this.props.user,
+      userToken: this.props.userToken,
+      addFavorite: addFavorite
+    };
   }
 
+  addFavorite = () => {
+    this.setState({
+      addFavorite: false
+    });
+    axios({
+      method: 'post',
+      url: `https://primedome.herokuapp.com/users/${this.state.username}/Movies/${this.state.movie._id}`,
+      headers: { Authorization: `Bearer ${this.state.userToken}` },
+      data: {},
+    })
+    .then((response) => {
+      console.log('movie added');
+    })
+    .catch((e) => {
+      console.log(e);
+      console.log('movie not added');
+    });
+  };
+
   render() {
-    const { movie, goBack } = this.props;
+    const { movie } = this.props;
 
     if (!movie) return null;
 
@@ -33,18 +65,28 @@ export class MovieView extends React.Component {
         <br />
         <div className="movie-genre">
           <span className="label">Genre:</span>
-          <Button variant="link">{movie.Genre.Name}</Button>
+          <Link to={`/genres/${movie.Genre.Name}`}>
+            <Button variant="link">{movie.Genre.Name}</Button>
+          </Link>
         </div>
         <div className="movie-director">
           <span className="label">Director:</span>
-          <Button variant="link">{movie.Director.Name}</Button>
+          <Link to={`/directors/${movie.Director.Name}`}>
+            <Button variant="link">{movie.Director.Name}</Button>
+          </Link>
         </div>
-        <Button onClick={() => goBack()} variant="outline-danger">
-          Back
-        </Button>
-        <Button variant="primary" type="submit">
-          Add to Favorites!
-        </Button>
+        <Link to={'/'}>
+          <Button variant="outline-danger">Back</Button>
+        </Link>
+        {this.state.addFavorite && (
+          <Button 
+            variant="secondary" 
+            type="submit" 
+            onClick={this.addFavorite}
+          >
+            Add Favorite
+          </Button>
+        )}
       </div>
     );
   }
