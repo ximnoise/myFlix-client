@@ -5,16 +5,16 @@ import { connect } from 'react-redux';
 
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
+import MoviesList from '../movies-list/movies-list';
 import { LoginView } from '../login-view/login-view';
 import { RegistrationView } from '../registration-view/registration-view';
-import { MovieCard } from '../movie-card/movie-card';
 import { MovieView } from '../movie-view/movie-view';
 import { GenreView } from '../genre-view/genre-view';
 import { DirectorView } from '../director-view/director-view';
 import { NavView } from '../nav-view/nav-view';
 import { ProfileView } from '../profile-view/profile-view';
 
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row } from 'react-bootstrap';
 
 import { setMovies } from '../../actions/actions';
 
@@ -109,51 +109,39 @@ export class MainView extends React.Component {
       <Router>
         <Container fluid="md" className="container">
           <NavView user={user} />
-          <Row className="justify-content-md-center">
-            <Route exact path="/" render={() => {
-              if (!user) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
-              return movies.map((m) => 
-              <Col xs="auto" key={m._id}>
-                <MovieCard 
-                  user={user} 
-                  userToken={this.state.userToken} 
-                  key={m._id} 
-                  movie={m}
-                  addFavorite={this.state.favoriteMovies.includes(m._id) ? false : true} 
-                />
-              </Col>
-              )}
-            }/>
-            <Route path="/register" render={() => <RegistrationView /> }/>
-            <Route path="/movies/:movieId" render={({match}) => 
-              <MovieView 
-                movie={movies.find((m)=> m._id === match.params.movieId)}
-                user={user}
-                userToken={this.state.userToken}
-                addFavorite={this.state.favoriteMovies.includes(match.params.movieId) ? false : true} 
-              />
-            }/>
-            <Route path="/genres/:name" render={({match}) => 
-              <GenreView 
-                genre={movies.find((m) => m.Genre.Name === match.params.name).Genre}
-                movies={movies.filter((m) => m.Genre.Name === match.params.name)} 
-              />
-            }/>
-            <Route path="/directors/:name" render={({ match }) => {
-              if (!movies) return <div className="main-view"/>;
-              return <DirectorView 
-                director={movies.find((m) => m.Director.Name === match.params.name).Director}
-                movies={movies.filter((m) => m.Director.Name === match.params.name)} 
-              />}
-            }/>
-            <Route path="/profile" render={() => 
-              <ProfileView 
-                user={user} 
-                userToken={this.state.userToken} 
-                movies={movies} 
-              /> 
-            }/>
-          </Row>
+          <Route exact path="/" render={() => {
+            if (!user) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
+            return <MoviesList movies={movies} />;
+          }}/>
+          <Route path="/register" render={() => <RegistrationView /> }/>
+          <Route path="/movies/:movieId" render={({match}) => 
+            <MovieView 
+               movie={movies.find((m)=> m._id === match.params.movieId)}
+              user={user}
+              userToken={this.state.userToken}
+              addFavorite={this.state.favoriteMovies.includes(match.params.movieId) ? false : true} 
+            />
+          }/>
+          <Route path="/genres/:name" render={({match}) => 
+            <GenreView 
+              genre={movies.find((m) => m.Genre.Name === match.params.name).Genre}
+              movies={movies.filter((m) => m.Genre.Name === match.params.name)} 
+            />
+          }/>
+          <Route path="/directors/:name" render={({ match }) => {
+            if (!movies) return <div className="main-view"/>;
+            return <DirectorView 
+              director={movies.find((m) => m.Director.Name === match.params.name).Director}
+              movies={movies.filter((m) => m.Director.Name === match.params.name)} 
+            />}
+          }/>
+          <Route path="/profile" render={() => 
+            <ProfileView 
+              user={user} 
+              userToken={this.state.userToken} 
+              movies={movies} 
+            /> 
+          }/>
         </Container>
       </Router>
     );
