@@ -6,6 +6,8 @@ import VisibilityFilterInput from '../visibility-filter-input/visibility-filter-
 
 import { Row, Col } from 'react-bootstrap';
 
+import './movies-list.scss';
+
 
 const mapStateToProps = state => {
   const { visibilityFilter } = state;
