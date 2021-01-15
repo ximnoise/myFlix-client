@@ -2,9 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
+import { connect } from 'react-redux';
+
 import { Link } from 'react-router-dom';
 
 import { Button, Card } from 'react-bootstrap';
+
+import { setFavoriteMovies } from '../../actions/actions';
 
 import './movie-card.scss';
 
@@ -24,7 +28,7 @@ export class MovieCard extends React.Component {
     }
 
     this.state = {
-      movie: this.props.movie,
+      movies: props.movies,
       username: props.user,
       userToken: props.userToken,
       addFavorite: addFavorite,
@@ -38,7 +42,7 @@ export class MovieCard extends React.Component {
     });
     axios({
       method: 'post',
-      url: `https://primedome.herokuapp.com/users/${this.state.username}/Movies/${this.state.movie._id}`,
+      url: `https://primedome.herokuapp.com/users/${this.state.username}/Movies/${this.state.movies._id}`,
       headers: { Authorization: `Bearer ${this.state.userToken}` },
       data: {},
     })
@@ -56,7 +60,7 @@ export class MovieCard extends React.Component {
     this.setState({
       removeFavorite: false,
     });
-    axios.delete(`https://primedome.herokuapp.com/users/${this.state.username}/Movies/${this.state.movie._id}`, {
+    axios.delete(`https://primedome.herokuapp.com/users/${this.state.username}/Movies/${this.state.movies._id}`, {
         headers: { Authorization: `Bearer ${this.state.userToken}` },
     })
     .then((response) => {
@@ -69,16 +73,16 @@ export class MovieCard extends React.Component {
   };
 
   render() {
-    const { movie } = this.props;
+    const { movies } = this.props;
 
     return (
       <Card className="bg-dark">
-        <Card.Img variant="top" src={movie.ImagePath} />
+        <Card.Img variant="top" src={movies.ImagePath} />
         <Card.Body>
-          <Card.Title>{movie.Title}</Card.Title>
-          <Card.Text>{movie.Description}</Card.Text>
+          <Card.Title>{movies.Title}</Card.Title>
+          <Card.Text>{movies.Description}</Card.Text>
           <div className="button-wrapper">
-            <Link to={`/movies/${movie._id}`}>
+            <Link to={`/movies/${movies._id}`}>
               <Button 
                 className="more-button" 
                 variant="primary"
@@ -113,8 +117,19 @@ export class MovieCard extends React.Component {
   }
 }
 
+let mapStateToProps = state => {
+  return {
+    movies: state.movies,
+    user: state.user,
+    userToken: state.userToken,
+    favoriteMovies: state.favoriteMovies
+  }
+}
+
+export default connect(mapStateToProps, { setFavoriteMovies })(MovieCard);
+
 MovieCard.propTypes = {
-  movie: PropTypes.shape({
+  movies: PropTypes.shape({
     Title: PropTypes.string.isRequired,
     Description: PropTypes.string.isRequired,
     Genre: PropTypes.shape({

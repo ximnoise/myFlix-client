@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
+import { connect } from 'react-redux';
+
 import { MovieCard } from '../movie-card/movie-card';
 import { ProfileEditView } from '../profile-edit-view/profile-edit-view';
 
 import { Button, Modal, Col, Row } from 'react-bootstrap';
+
+import { setUser, setFavoriteMovies } from '../../actions/actions';
 
 import './profile-view.scss';
 
@@ -13,7 +17,6 @@ export function ProfileView(props) {
   const [ username, setUsername ] = useState('');
   const [ email, setEmail ] = useState('');
   const [ birthday, setBirthday ] = useState(new Date());
-  const [ favoriteMovies, setFavoriteMovies ] = useState([]);
   const [ edit, setEdit ] = useState(false);
   const [ show, setShow ] = useState(false);
 
@@ -24,6 +27,7 @@ export function ProfileView(props) {
     .then((response) => {
       let userData = response.data;
       setUsername(userData.Username);
+      setUser(userData.Username);
       setEmail(userData.Email);
       setBirthday(new Date(userData.Birthday));
       setFavoriteMovies(userData.FavoriteMovies);
@@ -49,11 +53,11 @@ export function ProfileView(props) {
     });
   };
 
-  let favorites = props.movies.filter((m) => favoriteMovies.includes(m._id));
+  let favorites = props.movies.filter((m) => props.favoriteMovies && props.favoriteMovies.includes(m._id));
 
   const updateFavorites = (movies) => {
     setFavoriteMovies(
-      favoriteMovies.filter((favMovies) => {
+      props.favoriteMovies.filter((favMovies) => {
         return favMovies !== movies;
       })
     );
@@ -120,7 +124,7 @@ export function ProfileView(props) {
                 user={props.user}
                 userToken={props.userToken}
                 key={m._id}
-                movie={m}
+                movies={m}
                 removeFavorite={true}
                 updateFavorites={updateFavorites}
               />
@@ -131,3 +135,14 @@ export function ProfileView(props) {
     </div>
   );
 }
+
+let mapStateToProps = (state) => {
+  return {
+    movies: state.movies,
+    user: state.user,
+    userToken: state.userToken,
+    favoriteMovies: state.favoriteMovies
+  }
+}
+
+export default connect(mapStateToProps, { setUser, setFavoriteMovies })(ProfileView);
