@@ -99,7 +99,7 @@ export class MovieCard extends React.Component {
             {this.state.removeFavorite && (
               <Button 
                 className="remove-button" 
-                variant="outline-danger" 
+                variant="danger" 
                 type="submit" 
                 onClick={this.removeFavorite}
               >

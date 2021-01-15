@@ -76,7 +76,7 @@ export class MovieView extends React.Component {
           </Link>
         </div>
         <Link to={'/'}>
-          <Button variant="outline-danger">Back</Button>
+          <Button variant="danger">Back</Button>
         </Link>
         {this.state.addFavorite && (
           <Button 

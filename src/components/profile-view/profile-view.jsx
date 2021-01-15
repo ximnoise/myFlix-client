@@ -113,7 +113,7 @@ export function ProfileView(props) {
       {edit && <ProfileEditView user={props.user} userToken={props.userToken} />}
       <div className="favorite-movies-container">
         <span className="label">Favorite Movies:</span>
-        <Row className="favorite-movies">
+        <Row className="justify-content-md-center">
           {favorites.map((m) => (
             <Col xs="auto" key={m._id}>
               <MovieCard

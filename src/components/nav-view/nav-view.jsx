@@ -28,10 +28,7 @@ export class NavView extends React.Component {
       <Navbar collapseOnSelect expand="lg" sticky="top" className="navbar-dark bg-primary">
         <Navbar.Brand href="/">PrimeDome</Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Navbar.Collapse id="responsive-navbar-nav">
-          <Nav className="mr-auto">
-            <Nav.Link href="#">Features</Nav.Link>
-          </Nav>
+        <Navbar.Collapse id="responsive-navbar-nav" className="justify-content-end">
           <Nav>
             <Link to={'/profile'}>
               <Button 
