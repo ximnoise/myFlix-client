@@ -105,7 +105,7 @@ export function ProfileView(props) {
       </Button>
       <Button 
         className="deregister-button" 
-        variant="outline-danger" 
+        variant="danger" 
         onClick={handleShow}
       >
         Delete account

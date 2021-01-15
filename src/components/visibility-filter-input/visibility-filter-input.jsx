@@ -12,7 +12,7 @@ import './visibility-filter-input.scss';
 
 function VisibilityFilterInput(props) {
   return <Form.Control
-    className="filter-input bg-transparent text-light"
+    className="filter-input text-primary"
     onChange={e => props.setFilter(e.target.value)}
     value={props.visibilityFilter}
     placeholder="Search for movies"
