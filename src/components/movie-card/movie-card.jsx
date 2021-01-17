@@ -47,6 +47,7 @@ export class MovieCard extends React.Component {
       data: {},
     })
     .then((response) => {
+      console.log(response);
       console.log('movie added');
     })
     .catch((e) => {

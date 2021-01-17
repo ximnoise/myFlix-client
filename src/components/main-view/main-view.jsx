@@ -143,7 +143,7 @@ export class MainView extends React.Component {
           <Route path="/profile" render={() => 
             <ProfileView 
               user={user} 
-              userToken={this.state.userToken} 
+              userToken={this.props.userToken} 
               movies={movies} 
             /> 
           }/>
