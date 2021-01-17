@@ -8,10 +8,10 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import MoviesList from '../movies-list/movies-list';
 import { LoginView } from '../login-view/login-view';
 import { RegistrationView } from '../registration-view/registration-view';
-import { MovieView } from '../movie-view/movie-view';
 import { GenreView } from '../genre-view/genre-view';
 import { DirectorView } from '../director-view/director-view';
 import { NavView } from '../nav-view/nav-view';
+import { MovieView } from '../movie-view/movie-view';
 import { ProfileView } from '../profile-view/profile-view';
 
 import { Container } from 'react-bootstrap';
@@ -30,8 +30,7 @@ export class MainView extends React.Component {
     // Initial state is set to null
     this.state = {
       movies: [],
-      user: null,
-      favoriteMovies: []
+      user: null
     };
   }
 
@@ -84,7 +83,8 @@ export class MainView extends React.Component {
       let userData = response.data;
       this.props.setUser(userData.Username);
       this.props.setUserToken(userToken);
-      this.props.setFavoriteMovies(userData.favoriteMovies);
+      this.props.setFavoriteMovies(userData.FavoriteMovies);
+      console.log(userData);
 
 
       /*this.setState({
@@ -116,16 +116,11 @@ export class MainView extends React.Component {
           <NavView user={user} />
           <Route exact path="/" render={() => {
             if (!user) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
-            return <MoviesList movies={movies} user={user} userToken={this.props.userToken} favoriteMovies={this.props.favoriteMovies} />;
+            return <MoviesList movies={movies} />;
           }}/>
           <Route path="/register" render={() => <RegistrationView /> }/>
           <Route path="/movies/:movieId" render={({match}) => 
-            <MovieView 
-              movie={movies.find((m)=> m._id === match.params.movieId)}
-              user={user}
-              userToken={this.state.userToken}
-              addFavorite={this.state.favoriteMovies.includes(match.params.movieId) ? false : true} 
-            />
+            <MovieView movie={movies.find((m)=> m._id === match.params.movieId)} />
           }/>
           <Route path="/genres/:name" render={({match}) => 
             <GenreView 
@@ -141,10 +136,10 @@ export class MainView extends React.Component {
             />}
           }/>
           <Route path="/profile" render={() => 
-            <ProfileView 
-              user={user} 
-              userToken={this.props.userToken} 
-              movies={movies} 
+            <ProfileView
+              user={user}
+              movies={movies}
+              favoriteMovies={this.props.favoriteMovies} 
             /> 
           }/>
         </Container>

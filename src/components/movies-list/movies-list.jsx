@@ -25,7 +25,7 @@ function MoviesList(props) {
       <Row className="justify-content-md-center">
       {filteredMovies.map((m) => 
         <Col xs="auto" key={m._id}>
-          <MovieCard key={m._id} movies={m} user={props.user} userToken={props.userToken} addFavorite={props.favoriteMovies.includes(m._id) ? false : true} />
+          <MovieCard movies={m} />
         </Col>
       )}
       </Row>

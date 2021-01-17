@@ -1,148 +1,136 @@
-import React, { useState } from 'react';
+import React from 'react';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 
 import { connect } from 'react-redux';
 
 import { MovieCard } from '../movie-card/movie-card';
 import { ProfileEditView } from '../profile-edit-view/profile-edit-view';
 
-import { Button, Modal, Col, Row } from 'react-bootstrap';
+import { Button, Col, Row } from 'react-bootstrap';
 
-import { setUser, setFavoriteMovies } from '../../actions/actions';
+import { setUser, setUserToken, setFavoriteMovies } from '../../actions/actions';
 
 import './profile-view.scss';
 
 
-export function ProfileView(props) {
-  const [ username, setUsername ] = useState('');
-  const [ email, setEmail ] = useState('');
-  const [ birthday, setBirthday ] = useState(new Date());
-  const [ edit, setEdit ] = useState(false);
-  const [ show, setShow ] = useState(false);
+export class ProfileView extends React.Component {
+  constructor() {
+    super();
 
-  if (username === '') {
-    axios.get(`https://primedome.herokuapp.com/users/${props.user}`, {
-      headers: { Authorization: `Bearer ${props.userToken}` }
+    this.state = {
+      birthday: null,
+      email: null
+    };
+  }
+
+  componentDidMount() {
+    const accessToken  = localStorage.getItem('token');
+    this.getUserData(accessToken);
+  }
+
+  getUserData(token) {
+    const username = localStorage.getItem('user');
+    axios.get(`https://primedome.herokuapp.com/users/${username}`, {
+      headers: { Authorization: `Bearer ${token}` }
     })
     .then((response) => {
       let userData = response.data;
-      setUsername(userData.Username);
-      setUser(userData.Username);
-      setEmail(userData.Email);
-      setBirthday(new Date(userData.Birthday));
-      setFavoriteMovies(userData.FavoriteMovies);
+      this.setState({
+        birthday: userData.Birthday,
+        email: userData.Email
+      });
     })
     .catch((error) => {
       console.log(error);
     });
   }
 
-  if (!username) return null;
+  deregisterUser() {
+    const username = localStorage.getItem('user');
+    const accessToken  = localStorage.getItem('token');
+    if (confirm('Please confirm that you want to delete your profile.')) {
+      return (
+        axios.delete(`https://primedome.herokuapp.com/users/${username}`, {
+          headers: { Authorization: `Bearer ${accessToken}` }
+        })
+        .then((response) => {
+          console.log(response);
+          alert('You have been deleted from the registry.');
+          localStorage.clear();
+          window.open('/', '_self');
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+      );
+    }
+  }
 
-  function deregister() {
-    axios.delete(`https://primedome.herokuapp.com/users/${props.user}`, {
-      headers: { Authorization: `Bearer ${props.userToken}` }
+  deleteFavoriteMovies(movie) {
+    const username = localStorage.getItem('user');
+    const accessToken  = localStorage.getItem('token');
+    axios.delete(`https://primedome.herokuapp.com/users/${username}/Movies/${movie._id}`, {
+      headers: { Authorization: `Bearer ${accessToken}` }
     })
     .then((response) => {
       console.log(response);
-      localStorage.clear();
-      window.open('/', '_self');
+      alert('The movie has been removed from your Favorites.');
+      this.componentDidMount();
+      window.open('/profile', '_self');
     })
     .catch((error) => {
       console.log(error);
     });
-  };
-
-  let favorites = props.movies.filter((m) => props.favoriteMovies && props.favoriteMovies.includes(m._id));
-
-  const updateFavorites = (movies) => {
-    setFavoriteMovies(
-      props.favoriteMovies.filter((favMovies) => {
-        return favMovies !== movies;
-      })
-    );
-  };
-
-  const editUser = () => {
-    setEdit(!edit);
   }
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  render() {
+    const { movies, favoriteMovies } = this.props;
+    const FaveMovies = movies.filter(movie => favoriteMovies.includes(movie._id));
 
-
-  return (
-    <div className="profile-view">
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Accept Changes</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Are you sure you want to delete your account?</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="danger" onClick={deregister}>
-            Delete Account
-          </Button>
-        </Modal.Footer>
-      </Modal>
-
-      <div className="username">
-        <span className="label">Username: </span>
-        <span className="value">{username}</span>
+    return(
+      <div className="profile-view">
+        <div className="username">
+          <span className="label">Username: </span>
+          <span className="value">{this.props.user}</span>
+        </div>
+        <div className="email">
+          <span className="label">Email: </span>
+          <span className="value">{this.state.email}</span>
+        </div>
+        <div className="birthday">
+          <span className="label">Birthday: </span>
+          <span className="value">{this.state.birthday}</span>
+        </div>
+        <Button 
+          className="deregister-button" 
+          variant="danger" 
+          onClick={() => this.deregisterUser()}
+        >
+          Delete profile
+        </Button>
+        <div className="favorite-movies-container">
+          <span className="label">Favorite Movies:</span>
+          <Row className="justify-content-md-center fav-movies">
+            {FaveMovies.map((m) => (
+              <Col xs="auto" key={m._id}>
+                <MovieCard movies={m} />
+                <Button variant="danger" onClick={() => this.deleteFavoriteMovies(m)}>Remove favorite</Button>
+              </Col>
+            ))}
+          </Row>
+        </div>
       </div>
-      <div className="email">
-        <span className="label">Email: </span>
-        <span className="value">{email}</span>
-      </div>
-      <div className="birthday">
-        <span className="label">Birthday: </span>
-        <span className="value">{birthday.toDateString()}</span>
-      </div>
-      <Button 
-        className="edit-button" 
-        variant="primary" 
-        onClick={editUser}
-      >
-        Edit
-      </Button>
-      <Button 
-        className="deregister-button" 
-        variant="danger" 
-        onClick={handleShow}
-      >
-        Delete account
-      </Button>
-      {edit && <ProfileEditView user={props.user} userToken={props.userToken} />}
-      <div className="favorite-movies-container">
-        <span className="label">Favorite Movies:</span>
-        <Row className="justify-content-md-center">
-          {favorites.map((m) => (
-            <Col xs="auto" key={m._id}>
-              <MovieCard
-                user={props.user}
-                userToken={props.userToken}
-                key={m._id}
-                movies={m}
-                removeFavorite={true}
-                updateFavorites={updateFavorites}
-              />
-             </Col>
-          ))}
-        </Row>
-      </div>
-    </div>
-  );
+    )
+  }
 }
 
-let mapStateToProps = (state) => {
-  return {
-    movies: state.movies,
+let mapStateToProps = state => {
+  return { 
     user: state.user,
     userToken: state.userToken,
     favoriteMovies: state.favoriteMovies
-  }
+   }
 }
 
-export default connect(mapStateToProps, { setUser, setFavoriteMovies })(ProfileView);
+export default connect(mapStateToProps, { setUser, setUserToken, setFavoriteMovies })(ProfileView);
