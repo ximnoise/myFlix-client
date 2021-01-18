@@ -1,11 +1,11 @@
 import React from 'react';
 import axios from 'axios';
-import PropTypes from 'prop-types';
+
+import { Link } from 'react-router-dom';
 
 import { connect } from 'react-redux';
 
 import { MovieCard } from '../movie-card/movie-card';
-import { ProfileEditView } from '../profile-edit-view/profile-edit-view';
 
 import { Button, Col, Row } from 'react-bootstrap';
 
@@ -85,7 +85,7 @@ export class ProfileView extends React.Component {
   }
 
   render() {
-    const { movies, favoriteMovies } = this.props;
+    const { user, movies, favoriteMovies } = this.props;
     const FaveMovies = movies.filter(movie => favoriteMovies.includes(movie._id));
 
     return(
@@ -102,6 +102,9 @@ export class ProfileView extends React.Component {
           <span className="label">Birthday: </span>
           <span className="value">{this.state.birthday}</span>
         </div>
+        <Link to={`/users/${user}`}>
+          <Button variant="primary">Edit</Button>
+        </Link>
         <Button 
           className="deregister-button" 
           variant="danger" 

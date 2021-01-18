@@ -13,6 +13,7 @@ import { DirectorView } from '../director-view/director-view';
 import { NavView } from '../nav-view/nav-view';
 import { MovieView } from '../movie-view/movie-view';
 import { ProfileView } from '../profile-view/profile-view';
+import { ProfileEditView } from '../profile-edit-view/profile-edit-view';
 
 import { Container } from 'react-bootstrap';
 
@@ -39,11 +40,6 @@ export class MainView extends React.Component {
     let user = localStorage.getItem('user');
     if (accessToken !== null) {
       this.props.setUser(localStorage.getItem('user'));
-
-      /*this.setState({
-        user: localStorage.getItem('user')
-      }); */
-
       this.getUserData(accessToken, user);
     }
   }
@@ -52,11 +48,6 @@ export class MainView extends React.Component {
   // the `user` property in state to that particular user
   onLoggedIn(authData) {
     this.props.setUser(authData.user.Username);
-
-    /*this.setState({
-      user: authData.user.Username
-    }); */
-
     localStorage.setItem('token', authData.token);
     localStorage.setItem('user', authData.user.Username);
     this.getUserData(authData.token, authData.user.Username);
@@ -84,16 +75,6 @@ export class MainView extends React.Component {
       this.props.setUser(userData.Username);
       this.props.setUserToken(userToken);
       this.props.setFavoriteMovies(userData.FavoriteMovies);
-      console.log(userData);
-
-
-      /*this.setState({
-        user: userData.Username,
-        userToken: userToken,
-        favoriteMovies: userData.FavoriteMovies,
-        email: userData.Email,
-        birthday: userData.Birthday
-      }); */
     })
     .catch(function (error) {
       console.log(error);
@@ -141,6 +122,9 @@ export class MainView extends React.Component {
               movies={movies}
               favoriteMovies={this.props.favoriteMovies} 
             /> 
+          }/>
+          <Route path="/users/:username" render={() => 
+            <ProfileEditView user={user} userToken={this.props.userToken} />
           }/>
         </Container>
       </Router>
