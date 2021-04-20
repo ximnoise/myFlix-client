@@ -2,7 +2,7 @@
   "name": "myFlix-client",
   "version": "1.0.0",
   "description": "This is the client side of the myFlix App. It build on React.",
-  "main": "index.js",
+  "main": "src/index.html",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
