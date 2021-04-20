@@ -7,47 +7,37 @@ import { Button } from 'react-bootstrap';
 
 import './movie-view.scss';
 
-
 export class MovieView extends React.Component {
-  constructor(props) {
-    super(props);
-
-    let addFavorite = false;
-    if (props.addFavorite) {
-      addFavorite = true;
-    }
-
-    this.state = {
-      movie: this.props.movie,
-      username: this.props.user,
-      userToken: this.props.userToken,
-      addFavorite: addFavorite
-    };
+  constructor() {
+    super()
   }
 
-  addFavorite = () => {
-    this.setState({
-      addFavorite: false
-    });
-    axios({
-      method: 'post',
-      url: `https://primedome.herokuapp.com/users/${this.state.username}/Movies/${this.state.movie._id}`,
-      headers: { Authorization: `Bearer ${this.state.userToken}` },
-      data: {},
-    })
-    .then((response) => {
-      console.log('movie added');
-    })
-    .catch((e) => {
-      console.log(e);
-      console.log('movie not added');
-    });
-  };
+  addFavoriteMovies(movie) {
+    const username = localStorage.getItem('user');
+    const accessToken  = localStorage.getItem('token');
+    if (confirm('Add to list of Favorites?')) {
+      return (
+        axios({
+          method: 'post',
+          url: `https://primedome.herokuapp.com/users/${username}/Movies/${movie._id}`,
+          headers: { Authorization: `Bearer ${accessToken}` },
+          data: {},
+        })
+        .then((response) => {
+          console.log(response);
+          alert('You have added this movie to our list of Favorites.');
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+      );
+    }
+  }
 
   render() {
     const { movie } = this.props;
 
-    if (!movie) return null;
+    if(!movie) return null;
 
     return (
       <div className="movie-view">
@@ -76,17 +66,15 @@ export class MovieView extends React.Component {
           </Link>
         </div>
         <Link to={'/'}>
-          <Button variant="outline-danger">Back</Button>
+          <Button variant="danger">Back</Button>
         </Link>
-        {this.state.addFavorite && (
-          <Button 
-            variant="secondary" 
-            type="submit" 
-            onClick={this.addFavorite}
-          >
-            Add Favorite
-          </Button>
-        )}
+        <Button 
+          variant="secondary" 
+          type="submit" 
+          onClick={() => this.addFavoriteMovies(movie)}
+        >
+          Add Favorite
+        </Button>
       </div>
     );
   }
