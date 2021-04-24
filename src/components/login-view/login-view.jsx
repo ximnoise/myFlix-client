@@ -37,7 +37,7 @@ export function LoginView(props) {
   return (
     <Container>
       <div className="welcome-area">
-        <h2>Welcome to PrimeDome</h2>
+        <h2>Welcome to myFlix</h2>
         <Button className="login-toggle btn-primary" onClick={loginUser}>
           Login
         </Button>
@@ -47,7 +47,7 @@ export function LoginView(props) {
           </Button>
         </Link>
       </div>
-      {login && 
+      {login &&
       <Form className="login-form">
         <Form.Group controlId="formBasicUsername">
           <Form.Label>Username</Form.Label>

@@ -53498,7 +53498,7 @@ function LoginView(props) {
 
   return _react.default.createElement(_reactBootstrap.Container, null, _react.default.createElement("div", {
     className: "welcome-area"
-  }, _react.default.createElement("h2", null, "Welcome to PrimeDome"), _react.default.createElement(_reactBootstrap.Button, {
+  }, _react.default.createElement("h2", null, "Welcome to myFlix"), _react.default.createElement(_reactBootstrap.Button, {
     className: "login-toggle btn-primary",
     onClick: loginUser
   }, "Login"), _react.default.createElement(_reactRouterDom.Link, {
@@ -54943,7 +54943,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64383" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50617" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
